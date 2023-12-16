@@ -16,6 +16,8 @@ function App() {
   const pokemonsFetchParams = useSelector(selectPokemonsFetchParams);
   const pokemons = useSelector(selectPokemons);
 
+  //tests
+
   useEffect(() => {
     fetch('https://pokeapi.co/api/v2/type/')
       .then((res) => res.json())
