@@ -22,6 +22,8 @@ export default function List() {
   const pageCount = Math.ceil(pokemons?.count / currentAmount);
   const loading = useSelector(selectLoadingStatus);
 
+  console.log(pokemonsData);
+
   useEffect(() => {
     dispatch(
       setFetchParams(
