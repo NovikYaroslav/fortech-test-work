@@ -16,6 +16,11 @@
   opacity: 0.5;
 }
 
+.action-button:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
 @media (max-width: 355px) {
   .action-button {
     width: 40px;
