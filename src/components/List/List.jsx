@@ -4,42 +4,65 @@ import { useSelector, useDispatch } from 'react-redux';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import {
-  selectPokemons,
-  selectPokemonsData,
-  setFetchParams,
+  selectAllPokemonsAmount,
+  selectCurrentPokemonsList,
+  selectCurrentPokemonsData,
+  setCurrentPokemonsData,
+  setLoadingStatus,
+
   selectLoadingStatus,
 } from '../../store/reducers/pokemons';
 import prepareTypes from '../../utils/preparation-functions';
 import { amountToShow } from '../../utils/const';
 import './List.css';
+import { fetchCurrentPokemonsList } from '../../store/actions/asyncActions';
+
+// ugly code. eslint errors. hosting of functions ignored.
 
 export default function List() {
   const [currentAmount, setCurrentAmount] = useState(10);
   const [nextAmount, setNextAmount] = useState(0);
   const dispatch = useDispatch();
-  const pokemons = useSelector(selectPokemons);
-  const pokemonsData = useSelector(selectPokemonsData);
-  const pageCount = Math.ceil(pokemons?.count / currentAmount);
+  const pokemonsAmount = useSelector(selectAllPokemonsAmount);
+  const pokemons = useSelector(selectCurrentPokemonsList);
+  const pokemonsData = useSelector(selectCurrentPokemonsData);
+  const pageCount = Math.ceil(pokemonsAmount / currentAmount);
   const loading = useSelector(selectLoadingStatus);
 
-  console.log(pokemonsData);
+  const handlePageClick = (event) => {
+    setNextAmount((event.selected * currentAmount));
+  };
 
-  useEffect(() => {
-    dispatch(
-      setFetchParams(
-        `https://pokeapi.co/api/v2/pokemon/?limit=${currentAmount}&offset=${nextAmount}`,
-      ),
-    );
-  }, [nextAmount, currentAmount]);
+  function handlePokemonList() {
+    Promise.all(
+      pokemons?.map((el) => fetch(`https://pokeapi.co/api/v2/pokemon/${el.name}`)
+        .then((response) => response.json())),
+    )
+      .then((data) => dispatch(setCurrentPokemonsData(data)))
+      .then(() => dispatch(setLoadingStatus()))
+      .catch((error) => console.error(error));
+  }
+
+  function fetchPokemonsList(amount, next) {
+    dispatch(fetchCurrentPokemonsList({ amount, next }));
+  }
 
   function handleAmountButtonClick(amount) {
     setCurrentAmount(amount);
-    dispatch(setFetchParams(`https://pokeapi.co/api/v2/pokemon/?limit=${amount}&offset=0`));
+    fetchPokemonsList(amount);
   }
 
-  const handlePageClick = (event) => {
-    setNextAmount((event.selected * currentAmount) % pokemons?.count);
-  };
+  useEffect(() => {
+    fetchPokemonsList(currentAmount);
+  }, []);
+
+  useEffect(() => {
+    fetchPokemonsList(currentAmount, nextAmount);
+  }, [nextAmount, currentAmount]);
+
+  useEffect(() => {
+    handlePokemonList();
+  }, [pokemons]);
 
   return (
     <div className="list">

@@ -1,0 +1,8 @@
+.pokemon__info {
+    display: flex;
+    gap: 100px;
+    justify-content: space-between;
+    padding: 30px;
+    color: white;
+    font-size: 22px;
+}

@@ -12,59 +12,6 @@
   row-gap: 8px;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-}
-
-.types-filter {
-  opacity: 0;
-  transition: opacity 0.3s ease, max-height 0.3s ease;
-  overflow: hidden;
-  max-height: 0;
-}
-
-.types-filter.slide-in {
-  animation: slideIn 0.3s ease;
-  opacity: 1;
-  max-height: 500px;
-}
-
-.types-filter.slide-out {
-  animation: slideOut 0.3s ease;
-  opacity: 0;
-  max-height: 0;
-  pointer-events: none;
-}
-
 @media (max-width: 960px) {
   .types-filter {
     grid-template-columns: repeat(7, 1fr);
@@ -81,7 +28,7 @@
   .types-filter {
     grid-template-columns: repeat(3, 1fr);
   }
-}
+} 
 
 @import url('./styles/types-filter__types-tag.css');
 @import url('./styles/types-filter__open-button.css');

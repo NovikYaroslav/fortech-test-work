@@ -1,7 +1,4 @@
 .pokemon__photos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  border: 1px red solid;
-  background-color: antiquewhite;
+  display: flex;
+  justify-content: center;
 }

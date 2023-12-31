@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setFetchParams } from '../../store/reducers/pokemons';
+import { setCurrentPokemonsListByName } from '../../store/reducers/pokemons';
+import { fetchCurrentPokemonsList } from '../../store/actions/asyncActions';
+import useDebounce from '../../hooks/useDebounce';
 import pokeball from '../../img/pokeball.png';
 import dismiss from '../../img/dismiss.png';
 import './Search-panel.css';
@@ -8,17 +10,19 @@ import './Search-panel.css';
 export default function SearchPanel() {
   const dispatch = useDispatch();
   const [pokemonName, setPokemonName] = useState('');
+  const initialAmount = 10;
+  const initialNext = 0;
 
   // Add debounce
 
   function handleShowButtonClick(evt) {
     evt.preventDefault();
-    dispatch(setFetchParams(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`));
+    dispatch(setCurrentPokemonsListByName(pokemonName));
   }
 
   function handleSearchCancelClick() {
-    dispatch(setFetchParams('https://pokeapi.co/api/v2/pokemon/?limit=10&offset=0'));
     setPokemonName('');
+    dispatch(fetchCurrentPokemonsList({ initialAmount, initialNext }));
   }
 
   return (
@@ -40,6 +44,7 @@ export default function SearchPanel() {
           className="action-button"
           onClick={(evt) => handleShowButtonClick(evt)}
           type="submit"
+          disabled={pokemonName === ''}
         >
           <img className="action-button-image" src={pokeball} alt="pokeball" />
         </button>

@@ -4,10 +4,10 @@
   list-style: none;
   display: grid;
   justify-items: center;
-  grid-template-columns: repeat(5, 300px);
+  grid-template-columns: repeat(5, 1fr);
   grid-template-rows: 1fr auto;
-  column-gap: 25px;
-  row-gap: 20px;
+  column-gap: 20px;
+  row-gap: 25px;
 }
 
 @media (max-width: 1629px) {
