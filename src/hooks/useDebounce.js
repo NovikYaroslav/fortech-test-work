@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState()
-  const [isPending, setIsPending] = useState(false)
+  const [debouncedValue, setDebouncedValue] = useState();
+  const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setDebouncedValue(value)
-      setIsPending(false)
-    }, delay)
+      setDebouncedValue(value);
+      setIsPending(false);
+    }, delay);
 
     return () => {
-      clearTimeout(timeout)
-      setIsPending(true)
-    }
-  }, [value, delay])
+      clearTimeout(timeout);
+      setIsPending(true);
+    };
+  }, [value, delay]);
 
-  return [debouncedValue, isPending]
-}
+  return [debouncedValue, isPending];
+};
 
-export default useDebounce
+export default useDebounce;

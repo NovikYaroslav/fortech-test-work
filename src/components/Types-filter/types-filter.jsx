@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAllPokemonsTypesList } from '../../store/reducers/pokemons';
+import { selectAllPokemonsTypesList, resetCurrentPokemonsList } from '../../store/reducers/pokemons';
 import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
 import { typesColors } from '../../utils/const';
 import './types-filter.css';
@@ -16,7 +16,13 @@ export default function TypesFilter() {
       dispatch(fetchPokemonsWithTypes(typeName));
     } else {
       setActiveTags((prevActiveTags) => prevActiveTags.filter((tag) => tag !== typeName));
+      dispatch(fetchPokemonsWithTypes(typeName));
     }
+  }
+
+  function onClearClick() {
+    dispatch(resetCurrentPokemonsList());
+    setActiveTags([]);
   }
 
   return (
@@ -34,7 +40,7 @@ export default function TypesFilter() {
           {type.name}
         </button>
       ))}
-      <button className="types-filter__types-tag" type="button">Clear all</button>
+      <button className="types-filter__types-tag" type="button" onClick={onClearClick}>Clear all</button>
     </div>
   );
 }
