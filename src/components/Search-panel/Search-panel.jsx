@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setCurrentPokemonsListByName } from '../../store/reducers/pokemons';
-import { fetchCurrentPokemonsList } from '../../store/actions/asyncActions';
-// import useDebounce from '../../hooks/useDebounce';
+import { setCurrentPokemonsListByName, resetCurrentPokemonsList } from '../../store/reducers/pokemons';
 import pokeball from '../../img/pokeball.png';
 import dismiss from '../../img/dismiss.png';
 import './Search-panel.css';
@@ -10,10 +8,14 @@ import './Search-panel.css';
 export default function SearchPanel() {
   const dispatch = useDispatch();
   const [pokemonName, setPokemonName] = useState('');
-  const initialAmount = 10;
-  const initialNext = 0;
 
   // Add debounce
+
+  useEffect(() => {
+    if (pokemonName === '') {
+      dispatch(resetCurrentPokemonsList());
+    }
+  }, [pokemonName]);
 
   function handleShowButtonClick(evt) {
     evt.preventDefault();
@@ -22,7 +24,7 @@ export default function SearchPanel() {
 
   function handleSearchCancelClick() {
     setPokemonName('');
-    dispatch(fetchCurrentPokemonsList({ initialAmount, initialNext }));
+    dispatch(resetCurrentPokemonsList());
   }
 
   return (

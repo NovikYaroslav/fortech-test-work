@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import {
-  fetchAllPokemonsData, fetchCurrentPokemonsList, fetchAllPokemonsTypes, fetchPokemonsWithTypes,
+  fetchAllPokemonsData, fetchAllPokemonsTypes, fetchPokemonsWithTypes,
 } from '../actions/asyncActions';
 
 const pokemonsInitialState = {
@@ -10,11 +10,9 @@ const pokemonsInitialState = {
   allPokemonsTypesList: undefined,
   allPokemonsAmount: undefined,
 
-  currentPokemonsList: undefined,
-  currentPokemonsData: undefined,
-
-  typedPokemonsList: undefined,
-  typedPokemonsData: undefined,
+  currentPokemonsList: [],
+  currentPokemonsData: [],
+  currentPokemonTypes: [],
 
   loading: false,
 };
@@ -33,17 +31,22 @@ export const PokemonsSlice = createSlice({
 
     setCurrentPokemonsListByName: (state, action) => {
       state.currentPokemonsList = state.allPokemonsData
-        .filter((pokemon) => pokemon.name.includes(action.payload));
+        .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
     },
-    setLoadingStatus: (state) => {
+    resetCurrentPokemonsList: (state) => {
+      state.currentPokemonsList = [];
+    },
+
+    setLoading: (state) => {
+      state.loading = true;
+    },
+    setLoaded: (state) => {
       state.loading = false;
     },
+
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllPokemonsData.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(fetchCurrentPokemonsList.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchAllPokemonsData.fulfilled, (state, action) => {
@@ -53,12 +56,24 @@ export const PokemonsSlice = createSlice({
     builder.addCase(fetchAllPokemonsTypes.fulfilled, (state, action) => {
       state.allPokemonsTypesList = action.payload.results;
     });
-    builder.addCase(fetchCurrentPokemonsList.fulfilled, (state, action) => {
-      state.currentPokemonsList = action.payload.results;
+    builder.addCase(fetchPokemonsWithTypes.pending, (state) => {
+      state.loading = true;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
-      const fullTypedPokemonList = state.typedPokemonsList.push(action.payload);
-      state.typedPokemonsList = fullTypedPokemonList;
+      const { selectedType, response } = action.payload;
+      if (state.currentPokemonTypes.includes(selectedType)) {
+        state.currentPokemonTypes = state.currentPokemonTypes
+          .filter((type) => type !== selectedType);
+        state.currentPokemonsList = state.currentPokemonsList.filter(
+          (pokemon) => !response.pokemon.some((p) => p.pokemon.name === pokemon.name),
+        );
+      } else {
+        state.currentPokemonTypes.push(selectedType);
+        state.currentPokemonsList = [
+          ...state.currentPokemonsList,
+          ...response.pokemon.map((pokemon) => pokemon.pokemon),
+        ];
+      }
     });
   },
 });
@@ -70,8 +85,6 @@ const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
 
 const selectCurrentPokemonsList = (state) => state.pokemons.currentPokemonsList;
 const selectCurrentPokemonsData = (state) => state.pokemons.currentPokemonsData;
-
-// const selectTypedPokemonsList = (state) => state.pokemons.typedPokemonsList;
 
 const selectLoadingStatus = (state) => state.pokemons.loading;
 
@@ -92,6 +105,8 @@ export const {
   setCurrentPokemonsList,
   setCurrentPokemonsData,
   setCurrentPokemonsListByName,
+  resetCurrentPokemonsList,
   addChoosenTypes,
-  setLoadingStatus,
+  setLoading,
+  setLoaded,
 } = PokemonsSlice.actions;
