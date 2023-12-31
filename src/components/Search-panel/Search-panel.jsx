@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentPokemonsListByName } from '../../store/reducers/pokemons';
 import { fetchCurrentPokemonsList } from '../../store/actions/asyncActions';
+import useDebounce from '../../hooks/useDebounce';
 import pokeball from '../../img/pokeball.png';
 import dismiss from '../../img/dismiss.png';
 import './Search-panel.css';

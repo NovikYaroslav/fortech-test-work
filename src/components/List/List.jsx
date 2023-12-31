@@ -17,10 +17,6 @@ import { amountToShow } from '../../utils/const';
 import './List.css';
 import { fetchCurrentPokemonsList } from '../../store/actions/asyncActions';
 
-// separate functions was made for allPokemons request.
-// amount of pokemons taken dispached to store
-// pagination acts from amounts saved in store
-
 // ugly code. eslint errors. hosting of functions ignored.
 
 export default function List() {
@@ -39,9 +35,8 @@ export default function List() {
 
   function handlePokemonList() {
     Promise.all(
-      pokemons?.map((el) => fetch(`https://pokeapi.co/api/v2/pokemon/${el.pokemon ? el.pokemon.name : el.name}`).then(
-        (response) => response.json(),
-      )),
+      pokemons?.map((el) => fetch(`https://pokeapi.co/api/v2/pokemon/${el.name}`)
+        .then((response) => response.json())),
     )
       .then((data) => dispatch(setCurrentPokemonsData(data)))
       .then(() => dispatch(setLoadingStatus()))

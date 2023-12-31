@@ -5,8 +5,6 @@ import {
   fetchAllPokemonsData, fetchCurrentPokemonsList, fetchAllPokemonsTypes, fetchPokemonsWithTypes,
 } from '../actions/asyncActions';
 
-// добавляем стейт и селетор для кол-во отображаемых покемонов.
-
 const pokemonsInitialState = {
   allPokemonsData: undefined,
   allPokemonsTypesList: undefined,
@@ -15,7 +13,8 @@ const pokemonsInitialState = {
   currentPokemonsList: undefined,
   currentPokemonsData: undefined,
 
-  choosenTypes: [],
+  typedPokemonsList: undefined,
+  typedPokemonsData: undefined,
 
   loading: false,
 };
@@ -39,22 +38,6 @@ export const PokemonsSlice = createSlice({
     setLoadingStatus: (state) => {
       state.loading = false;
     },
-
-    // addChoosenTypes: (state, action) => {
-    // const pokemonsByType = state.allPokemonsAmount.filter((pokemon))
-    // state.activeTypes = [...state.activeTypes, action.payload];
-    // },
-    // removeChoosenTypes: (state, action) => {
-    //   state.activeTypes = state.activeTypes.filter
-    // }
-
-    // setDefaultCurrentPokemonsList: (state, action) => {
-    //   state.currentPokemonsData = action.payload;
-    // },
-
-    // setPokemonsAmount: (state, action) => {
-    //   state.pokemonsAmount = action.payload;
-    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllPokemonsData.pending, (state) => {
@@ -74,8 +57,8 @@ export const PokemonsSlice = createSlice({
       state.currentPokemonsList = action.payload.results;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.currentPokemonsList = action.payload;
+      const fullTypedPokemonList = state.typedPokemonsList.push(action.payload);
+      state.typedPokemonsList = fullTypedPokemonList;
     });
   },
 });
@@ -87,6 +70,8 @@ const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
 
 const selectCurrentPokemonsList = (state) => state.pokemons.currentPokemonsList;
 const selectCurrentPokemonsData = (state) => state.pokemons.currentPokemonsData;
+
+// const selectTypedPokemonsList = (state) => state.pokemons.typedPokemonsList;
 
 const selectLoadingStatus = (state) => state.pokemons.loading;
 
