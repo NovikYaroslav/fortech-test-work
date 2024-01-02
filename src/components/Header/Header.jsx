@@ -10,7 +10,6 @@ export default function Header() {
       <Link to="/">
         <img className="logo" src={Logo} alt="Logo" />
       </Link>
-
     </header>
   );
 }

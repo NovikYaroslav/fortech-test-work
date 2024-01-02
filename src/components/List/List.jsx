@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
 import { useSelector, useDispatch } from 'react-redux';
+import ReactPaginate from 'react-paginate';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import {

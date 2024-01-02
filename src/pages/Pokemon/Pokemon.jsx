@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
 import question from '../../img/no-image.png';
-import './Pokemon.css';
 import { statsColors, typesColors } from '../../utils/data';
 import { selectSelectedPokemon, selectLoadingStatus } from '../../store/reducers/pokemons';
 import { fetchSelectedPokemon } from '../../store/actions/asyncActions';
+import prepareTypes from '../../utils/preparation-functions';
+import './Pokemon.css';
 
 export default function Pokemon() {
   const dispatch = useDispatch();
@@ -52,10 +53,10 @@ export default function Pokemon() {
             <div className="pokemon__info">
               <div className="pokemon__info-block">
                 <h4 className="pokemon__header">Type:</h4>
-                {pokemon?.types.map((type) => (
-                  <p key={type.slot} className="pokemon__tag-type" style={{ backgroundColor: `${typesColors[type.type.name]}` }}>
-                    {type.type.name.charAt(0).toUpperCase()
-                + type.type.name.slice(1)}
+                {prepareTypes(pokemon?.types).map((type) => (
+                  <p key={type} className="pokemon__tag-type" style={{ backgroundColor: `${typesColors[type]}` }}>
+                    {type.charAt(0).toUpperCase()
+                + type.slice(1)}
                   </p>
                 ))}
 
@@ -80,7 +81,6 @@ export default function Pokemon() {
                 ))}
               </div>
             </div>
-            {/* <h4 className="pokemon__header">Stats:</h4> */}
             <div className="pokemon__stats">
 
               {pokemon?.stats.map((el) => (
@@ -97,7 +97,6 @@ export default function Pokemon() {
                     />
                   </div>
                 </React.Fragment>
-
               ))}
             </div>
 

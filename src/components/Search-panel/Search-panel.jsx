@@ -11,8 +11,6 @@ export default function SearchPanel() {
   const selectedTypes = useSelector(selectCurrentPokemonTypes);
   const [pokemonName, setPokemonName] = useState('');
 
-  console.log(selectedTypes);
-
   // Add debounce
 
   useEffect(() => {
