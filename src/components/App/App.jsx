@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { Routes, Route } from 'react-router';
 import Main from '../../pages/Main/Main';
-// import Pokemon from '../../pages/Pokemon/Pokemon';
+import Pokemon from '../../pages/Pokemon/Pokemon';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import {
@@ -20,8 +21,10 @@ function App() {
   return (
     <>
       <Header />
-      {/* <Pokemon /> */}
-      <Main />
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/pokemon/:name" element={<Pokemon />} />
+      </Routes>
       <Footer />
     </>
   );

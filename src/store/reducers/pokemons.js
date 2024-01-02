@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import {
-  fetchAllPokemonsData, fetchAllPokemonsTypes, fetchPokemonsWithTypes,
+  fetchAllPokemonsData, fetchAllPokemonsTypes, fetchPokemonsWithTypes, fetchSelectedPokemon,
 } from '../actions/asyncActions';
 
 const pokemonsInitialState = {
@@ -13,6 +13,8 @@ const pokemonsInitialState = {
   currentPokemonsList: [],
   currentPokemonsData: [],
   currentPokemonTypes: [],
+
+  selectedPokemon: undefined,
 
   loading: false,
 };
@@ -75,6 +77,14 @@ export const PokemonsSlice = createSlice({
         ];
       }
     });
+    builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.selectedPokemon = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(fetchSelectedPokemon.pending, (state) => {
+      state.loading = true;
+    });
   },
 });
 
@@ -86,6 +96,8 @@ const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
 const selectCurrentPokemonsList = (state) => state.pokemons.currentPokemonsList;
 const selectCurrentPokemonsData = (state) => state.pokemons.currentPokemonsData;
 
+const selectSelectedPokemon = (state) => state.pokemons.selectedPokemon;
+
 const selectLoadingStatus = (state) => state.pokemons.loading;
 
 export {
@@ -95,6 +107,8 @@ export {
 
   selectCurrentPokemonsList,
   selectCurrentPokemonsData,
+
+  selectSelectedPokemon,
 
   selectLoadingStatus,
 };
