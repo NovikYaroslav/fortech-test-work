@@ -12,14 +12,12 @@
 
 @media (max-width: 750px) {
     .pokemon__info-block {
-        width: 35%;
         padding: 10px 10px 10px 10px;
     }
   }
   
   @media (max-width: 550px) {
     .pokemon__info-block {
-        width: 45%;
         padding: 5px 5px 5px 5px;
     }
   }
