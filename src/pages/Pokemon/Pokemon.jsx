@@ -11,8 +11,6 @@ export default function Pokemon() {
   const loaded = useSelector(selectLoadingStatus);
   const pokemon = useSelector(selectSelectedPokemon);
 
-  console.log(loaded);
-
   // сделать классы для изображений и подписей
 
   return (
@@ -76,7 +74,7 @@ export default function Pokemon() {
                 ))}
               </div>
             </div>
-            <h4 className="pokemon__header">Stats:</h4>
+            {/* <h4 className="pokemon__header">Stats:</h4> */}
             <div className="pokemon__stats">
 
               {pokemon?.stats.map((el) => (

@@ -68,6 +68,7 @@ export const PokemonsSlice = createSlice({
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
       const { selectedType, response } = action.payload;
+      console.log(action.payload);
       if (state.currentPokemonTypes.includes(selectedType)) {
         state.currentPokemonTypes = state.currentPokemonTypes
           .filter((type) => type !== selectedType);
@@ -83,7 +84,6 @@ export const PokemonsSlice = createSlice({
       }
     });
     builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.selectedPokemon = action.payload;
       state.loading = false;
     });
