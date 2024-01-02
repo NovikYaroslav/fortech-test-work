@@ -1,4 +1,4 @@
-.action-button {
+.search-panel__button {
   border: solid 1px transparent;
   display: flex;
   justify-content: center;
@@ -11,18 +11,18 @@
     rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
 
-.action-button:hover {
+.search-panel__button:hover {
   cursor: pointer;
   opacity: 0.5;
 }
 
-.action-button:disabled {
+.search-panel__button:disabled {
   cursor: default;
   opacity: 1;
 }
 
 @media (max-width: 355px) {
-  .action-button {
+  .search-panel__button {
     width: 40px;
   }
 }

@@ -1,17 +1,23 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
 import question from '../../img/no-image.png';
 import './Pokemon.css';
 import { statsColors, typesColors } from '../../utils/data';
 import { selectSelectedPokemon, selectLoadingStatus } from '../../store/reducers/pokemons';
+import { fetchSelectedPokemon } from '../../store/actions/asyncActions';
 
 export default function Pokemon() {
+  const dispatch = useDispatch();
+  const urlParams = useParams();
+  const pokemonName = String(urlParams.name);
   const loaded = useSelector(selectLoadingStatus);
   const pokemon = useSelector(selectSelectedPokemon);
 
-  // сделать классы для изображений и подписей
+  useEffect(() => {
+    dispatch(fetchSelectedPokemon(pokemonName));
+  }, []);
 
   return (
     !loaded

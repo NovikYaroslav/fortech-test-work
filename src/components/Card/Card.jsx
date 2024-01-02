@@ -1,23 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import question from '../../img/no-image.png';
 import { typesColors } from '../../utils/data';
 import './Card.css';
 
-import { fetchSelectedPokemon } from '../../store/actions/asyncActions';
-
 export default function Card({
   id, name, avatar = question, type, hp, attack, defense,
 }) {
-  const dispatch = useDispatch();
-
-  function handleCardClick() {
-    dispatch(fetchSelectedPokemon(name));
-  }
-
   return (
-    <Link to={`/pokemon/${name}`} onClick={() => handleCardClick()} style={{ textDecoration: 'none', color: 'currentcolor' }}>
+    <Link to={`/pokemon/${name}`} style={{ textDecoration: 'none', color: 'currentcolor' }}>
       <li className="card">
 
         <div className="card_header">

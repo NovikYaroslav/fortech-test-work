@@ -14,5 +14,5 @@
 
 @import url('./styles/search-panel__form.css');
 @import url('./styles/search-panel__input.css');
-@import url('../Action-button/Action-button.css');
-@import url('../Action-button/Action-button-image.css');
+@import url('./styles/search-panel__button.css');
+@import url('./styles/search-panel__button-image.css');

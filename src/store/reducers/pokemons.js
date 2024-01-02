@@ -44,6 +44,17 @@ export const PokemonsSlice = createSlice({
       state.currentPokemonsList = [];
     },
 
+    // setSelectedTypes: (state, action) => {
+    //   state.currentPokemonTypes = [
+    //     ...state.currentPokemonTypes,
+    //     action.payload,
+    //   ];
+    // },
+    // removeSelectedTypes: (state, action) => {
+    //   state.currentPokemonTypes = state.currentPokemonTypes
+    //     .filter((type) => type !== action.payload);
+    // },
+
     setLoading: (state) => {
       state.loading = true;
     },
@@ -68,7 +79,7 @@ export const PokemonsSlice = createSlice({
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
       const { selectedType, response } = action.payload;
-      console.log(action.payload);
+      // убери логику с чисткой массива
       if (state.currentPokemonTypes.includes(selectedType)) {
         state.currentPokemonTypes = state.currentPokemonTypes
           .filter((type) => type !== selectedType);
@@ -77,10 +88,17 @@ export const PokemonsSlice = createSlice({
         );
       } else {
         state.currentPokemonTypes.push(selectedType);
-        state.currentPokemonsList = [
+
+        const allSelectedByType = [
           ...state.currentPokemonsList,
           ...response.pokemon.map((pokemon) => pokemon.pokemon),
         ];
+
+        const uniquePokemonsSet = new Set(allSelectedByType
+          .map((pokemon) => pokemon.name));
+        state.currentPokemonsList = Array.from(uniquePokemonsSet).map((pokemonName) => ({
+          name: pokemonName,
+        }));
       }
     });
     builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {
@@ -100,6 +118,7 @@ const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
 
 const selectCurrentPokemonsList = (state) => state.pokemons.currentPokemonsList;
 const selectCurrentPokemonsData = (state) => state.pokemons.currentPokemonsData;
+const selectCurrentPokemonTypes = (state) => state.pokemons.currentPokemonTypes;
 
 const selectSelectedPokemon = (state) => state.pokemons.selectedPokemon;
 
@@ -112,6 +131,7 @@ export {
 
   selectCurrentPokemonsList,
   selectCurrentPokemonsData,
+  selectCurrentPokemonTypes,
 
   selectSelectedPokemon,
 
@@ -124,6 +144,8 @@ export const {
   setCurrentPokemonsList,
   setCurrentPokemonsData,
   setCurrentPokemonsListByName,
+  // setSelectedTypes,
+  // removeSelectedTypes,
   resetCurrentPokemonsList,
   addChoosenTypes,
   setLoading,
