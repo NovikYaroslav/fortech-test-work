@@ -1,6 +1,9 @@
 # Pokemon Web Application
 
 [Live Demo](https://pokedex-two-omega.vercel.app/)
+Work in progress:
+- Code cleaning and refactoring required
+- Missed functionality implementation required
 
 ## Task Description
 
