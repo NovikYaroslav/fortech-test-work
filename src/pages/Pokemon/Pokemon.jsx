@@ -1,9 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
 import question from '../../img/no-image.png';
 import './Pokemon.css';
-import statsColors from '../../utils/data';
+import { statsColors, typesColors } from '../../utils/data';
 import { selectSelectedPokemon, selectLoadingStatus } from '../../store/reducers/pokemons';
 
 export default function Pokemon() {
@@ -19,7 +20,7 @@ export default function Pokemon() {
 
       ? (
         <div className="pokemon">
-          <button type="button">Back</button>
+          <Link to="/" className="pokemon__back-button" type="button" />
           <div className="pokemon__data">
 
             <div className="pokemon__name">
@@ -30,17 +31,17 @@ export default function Pokemon() {
               </h3>
             </div>
             <div className="pokemon__photos">
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div className="pokemon__photo-container">
                 <img className="pokemon__photo" src={pokemon?.sprites.front_default === null ? question : pokemon?.sprites.front_default} alt="front-view" />
-                <p style={{ color: 'aliceblue' }}>Front pixel view</p>
+                <p className="pokemon__photo-capture">Front pixel view</p>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div className="pokemon__photo-container">
                 <img className="pokemon__photo" src={pokemon?.sprites.other['official-artwork'].front_default === null ? question : pokemon?.sprites.other['official-artwork'].front_default} alt="hd-sprite-front" />
-                <p style={{ color: 'aliceblue' }}>Front HD view</p>
+                <p className="pokemon__photo-capture">Front HD view</p>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div className="pokemon__photo-container">
                 <img className="pokemon__photo" src={pokemon?.sprites.back_default === null ? question : pokemon?.sprites.back_default} alt="back-view" />
-                <p style={{ color: 'aliceblue' }}>Back pixel view</p>
+                <p className="pokemon__photo-capture">Back pixel view</p>
               </div>
 
             </div>
@@ -48,7 +49,7 @@ export default function Pokemon() {
               <div className="pokemon__info-block">
                 <h4 className="pokemon__header">Type:</h4>
                 {pokemon?.types.map((type) => (
-                  <p key={type.slot} className="pokemon__text">
+                  <p key={type.slot} className="pokemon__tag-type" style={{ backgroundColor: `${typesColors[type.type.name]}` }}>
                     {type.type.name.charAt(0).toUpperCase()
                 + type.type.name.slice(1)}
                   </p>

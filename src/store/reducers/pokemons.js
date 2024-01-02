@@ -32,8 +32,13 @@ export const PokemonsSlice = createSlice({
     },
 
     setCurrentPokemonsListByName: (state, action) => {
-      state.currentPokemonsList = state.allPokemonsData
-        .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
+      if (state.currentPokemonTypes.length !== 0) {
+        state.currentPokemonsList = state.currentPokemonsList
+          .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
+      } else {
+        state.currentPokemonsList = state.allPokemonsData
+          .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
+      }
     },
     resetCurrentPokemonsList: (state) => {
       state.currentPokemonsList = [];

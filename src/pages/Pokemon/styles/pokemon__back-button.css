@@ -1,0 +1,16 @@
+.pokemon__back-button {
+    border: none;
+    background-color: transparent;
+    /* border-radius: 50%; */
+    background-image: url(../../../img/back-pixel.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 150px;
+    height: 70px;
+}
+
+.pokemon__back-button:hover {
+ cursor: pointer;
+ opacity: 0.8;
+}

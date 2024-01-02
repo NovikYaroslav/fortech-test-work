@@ -1,0 +1,14 @@
+.pokemon__tag-type{
+    margin: 0;
+    width: 90%;
+    height: 30%;
+    font-size: 1.5vw;
+    font-weight: bold;
+    text-align: center;
+    text-transform: capitalize;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background-color: #719fb0;
+    box-sizing: border-box;
+  }
+  

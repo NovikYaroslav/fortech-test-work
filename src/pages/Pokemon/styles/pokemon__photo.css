@@ -3,3 +3,16 @@
   height: 200px;
   background-color: transparent;
 }
+@media (max-width: 750px) {
+  .pokemon__photo {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 550px) {
+  .pokemon__photo {
+    width: 100px;
+    height: 100px;
+  }
+}

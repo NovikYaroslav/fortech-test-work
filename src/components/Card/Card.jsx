@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import question from '../../img/no-image.png';
-import { typesColors } from '../../utils/const';
+import { typesColors } from '../../utils/data';
 import './Card.css';
 
 import { fetchSelectedPokemon } from '../../store/actions/asyncActions';

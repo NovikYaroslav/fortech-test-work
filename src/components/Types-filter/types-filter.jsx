@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllPokemonsTypesList, resetCurrentPokemonsList } from '../../store/reducers/pokemons';
 import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
-import { typesColors } from '../../utils/const';
+import { typesColors } from '../../utils/data';
 import './types-filter.css';
 
 export default function TypesFilter() {

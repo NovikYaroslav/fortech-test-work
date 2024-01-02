@@ -1,6 +1,7 @@
 .pokemon__name {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     color: white;
     font-size: 38px;
     gap: 10px;

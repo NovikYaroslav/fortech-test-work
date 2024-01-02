@@ -8,12 +8,16 @@
 }
 
 @import url('./styles/pokemon__data.css');
+@import url('./styles/pokemon__back-button.css');
 @import url('./styles/pokemon__header.css');
 @import url('./styles/pokemon__header-name.css');
+@import url('./styles/pokemon__tag-type.css');
 @import url('./styles/pokemon__text.css');
 @import url('./styles/pokemon__name.css');
 @import url('./styles/pokemon__photos.css');
 @import url('./styles/pokemon__photo.css');
+@import url('./styles/pokemon__photo-container.css');
+@import url('./styles/pokemon__photo-capture.css');
 @import url('./styles/pokemon__info.css');
 @import url('./styles/pokemon__info-block.css');
 @import url('./styles/pokemon__stats.css');

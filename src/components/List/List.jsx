@@ -14,7 +14,7 @@ import {
   selectLoadingStatus,
 } from '../../store/reducers/pokemons';
 import prepareTypes from '../../utils/preparation-functions';
-import { amountToShow } from '../../utils/const';
+import amountToShow from '../../utils/const';
 import './List.css';
 
 // ugly code. eslint errors. hosting of functions ignored.
