@@ -1,11 +1,11 @@
 .pokemon {
-  /* min-height: max-content;
-  width: 100vw; */
   display: flex;
   flex-direction: column;
   align-content: center;
   align-items: center;
 }
+
+
 
 @import url('./styles/pokemon__data.css');
 @import url('./styles/pokemon__back-button.css');
