@@ -18,14 +18,28 @@ export const fetchAllPokemonsTypes = createAsyncThunk(
   },
 );
 
+// export const fetchPokemonsWithTypes = createAsyncThunk(
+//   'pokemonsType/fetchAllByType',
+//   async (selectedType) => {
+//     const response = await fetch(
+//       `https://pokeapi.co/api/v2/type/${selectedType}`,
+//     )
+//       .then((res) => res.json());
+//     return { response, selectedType };
+//   },
+// );
+
 export const fetchPokemonsWithTypes = createAsyncThunk(
   'pokemonsType/fetchAllByType',
-  async (selectedType) => {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/type/${selectedType}`,
-    )
-      .then((res) => res.json());
-    return { response, selectedType };
+  async (selectedTypes) => {
+    const promisesArray = selectedTypes.map(async (type) => {
+      const response = await fetch(`https://pokeapi.co/api/v2/type/${type}`).then((res) => res.json());
+      return response;
+    });
+    const resultsArray = await Promise.all(promisesArray);
+    const flattenedResults = resultsArray.flatMap((result) => result.pokemon);
+    const finalResults = flattenedResults.map((entry) => entry.pokemon);
+    return finalResults;
   },
 );
 

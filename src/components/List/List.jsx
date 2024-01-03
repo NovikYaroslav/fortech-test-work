@@ -32,6 +32,7 @@ export default function List() {
     ? filtredPokemons.length / currentAmount
     : pokemonsAmount / currentAmount);
   const loading = useSelector(selectLoadingStatus);
+  // console.log(allPokemons);
 
   const handlePageClick = (event) => {
     dispatch(setLoading());

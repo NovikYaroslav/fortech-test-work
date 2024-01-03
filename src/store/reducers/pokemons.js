@@ -44,16 +44,13 @@ export const PokemonsSlice = createSlice({
       state.currentPokemonsList = [];
     },
 
-    // setSelectedTypes: (state, action) => {
-    //   state.currentPokemonTypes = [
-    //     ...state.currentPokemonTypes,
-    //     action.payload,
-    //   ];
-    // },
-    // removeSelectedTypes: (state, action) => {
-    //   state.currentPokemonTypes = state.currentPokemonTypes
-    //     .filter((type) => type !== action.payload);
-    // },
+    setSelectedTypes: (state, action) => {
+      state.currentPokemonTypes = action.payload;
+    },
+    removeSelectedTypes: (state, action) => {
+      state.currentPokemonTypes = state.currentPokemonTypes
+        .filter((type) => type !== action.payload);
+    },
 
     setLoading: (state) => {
       state.loading = true;
@@ -78,28 +75,31 @@ export const PokemonsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
-      const { selectedType, response } = action.payload;
+      // const { selectedType, response } = action.payload;
+      // console.log(selectedType);
+      console.log(action.payload);
+
       // убери логику с чисткой массива
-      if (state.currentPokemonTypes.includes(selectedType)) {
-        state.currentPokemonTypes = state.currentPokemonTypes
-          .filter((type) => type !== selectedType);
-        state.currentPokemonsList = state.currentPokemonsList.filter(
-          (pokemon) => !response.pokemon.some((p) => p.pokemon.name === pokemon.name),
-        );
-      } else {
-        state.currentPokemonTypes.push(selectedType);
+      // if (state.currentPokemonTypes.includes(selectedType)) {
+      //   state.currentPokemonTypes = state.currentPokemonTypes
+      //     .filter((type) => type !== selectedType);
+      //   state.currentPokemonsList = state.currentPokemonsList.filter(
+      //     (pokemon) => !response.pokemon.some((p) => p.pokemon.name === pokemon.name),
+      //   );
+      // } else {
+      //   state.currentPokemonTypes.push(selectedType);
+      state.currentPokemonsList = action.payload;
+      //   const allSelectedByType = [
+      //     ...state.currentPokemonsList,
+      //     ...response.pokemon.map((pokemon) => pokemon.pokemon),
+      //   ];
 
-        const allSelectedByType = [
-          ...state.currentPokemonsList,
-          ...response.pokemon.map((pokemon) => pokemon.pokemon),
-        ];
-
-        const uniquePokemonsSet = new Set(allSelectedByType
-          .map((pokemon) => pokemon.name));
-        state.currentPokemonsList = Array.from(uniquePokemonsSet).map((pokemonName) => ({
-          name: pokemonName,
-        }));
-      }
+      //   const uniquePokemonsSet = new Set(allSelectedByType
+      //     .map((pokemon) => pokemon.name));
+      //   state.currentPokemonsList = Array.from(uniquePokemonsSet).map((pokemonName) => ({
+      //     name: pokemonName,
+      //   }));
+      // }
     });
     builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {
       state.selectedPokemon = action.payload;
@@ -144,8 +144,8 @@ export const {
   setCurrentPokemonsList,
   setCurrentPokemonsData,
   setCurrentPokemonsListByName,
-  // setSelectedTypes,
-  // removeSelectedTypes,
+  setSelectedTypes,
+  removeSelectedTypes,
   resetCurrentPokemonsList,
   addChoosenTypes,
   setLoading,

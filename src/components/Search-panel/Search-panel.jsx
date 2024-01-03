@@ -13,6 +13,8 @@ export default function SearchPanel() {
 
   // Add debounce
 
+  console.log(selectedTypes);
+
   useEffect(() => {
     if (pokemonName === '') {
       dispatch(resetCurrentPokemonsList());
@@ -27,9 +29,7 @@ export default function SearchPanel() {
   function handleSearchCancelClick() {
     if (selectedTypes.length > 0) {
       setPokemonName('');
-      selectedTypes.forEach((type) => {
-        dispatch(fetchPokemonsWithTypes(type));
-      });
+      dispatch(fetchPokemonsWithTypes(selectedTypes));
     } else {
       setPokemonName('');
       dispatch(resetCurrentPokemonsList());

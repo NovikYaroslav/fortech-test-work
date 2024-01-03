@@ -42,7 +42,7 @@ export default function Pokemon() {
               </div>
               <div className="pokemon__photo-container">
                 <img className="pokemon__photo" src={pokemon?.sprites.other['official-artwork'].front_default === null ? question : pokemon?.sprites.other['official-artwork'].front_default} alt="hd-sprite-front" />
-                <p className="pokemon__photo-capture">Front HD view</p>
+                <p className="pokemon__photo-capture">HD view</p>
               </div>
               <div className="pokemon__photo-container">
                 <img className="pokemon__photo" src={pokemon?.sprites.back_default === null ? question : pokemon?.sprites.back_default} alt="back-view" />
