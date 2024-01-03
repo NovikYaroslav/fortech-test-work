@@ -1,9 +1,10 @@
 # Pokemon Web Application
 
-<!-- [Live Demo](https://pokedex-two-omega.vercel.app/) -->
+[Live Demo](https://pokedex-two-omega.vercel.app/)
 Work in progress:
-- Code cleaning and refactoring required
-- Missed functionality implementation required
+- Few bugs fixing
+- Code cleaning and refactoring can be done
+- Missed functionality implementation required (urlParams)
 
 ## Task Description
 
@@ -15,7 +16,6 @@ You are required to build a web application with Pokemons using the free Pokemon
 - Implement a search box to filter pokemons by name.
 - Allow filtering pokemons by type using tags (multiple selected tags should show pokemons with any of the selected types).
 - **In Progress: Store selected filters and pagination in the URL as query parameters.**
-- **In Progress: Ensure the application is responsive, looking good on both mobile and desktop devices.**
 
 ## Requirements
 
