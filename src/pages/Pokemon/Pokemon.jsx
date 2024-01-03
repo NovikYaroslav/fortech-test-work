@@ -53,12 +53,12 @@ export default function Pokemon() {
             <div className="pokemon__info">
               <div className="pokemon__info-block">
                 <h4 className="pokemon__header">Type:</h4>
-                {prepareTypes(pokemon?.types).map((type) => (
+                {pokemon ? prepareTypes(pokemon.types).map((type) => (
                   <p key={type} className="pokemon__tag-type" style={{ backgroundColor: `${typesColors[type]}` }}>
                     {type.charAt(0).toUpperCase()
                 + type.slice(1)}
                   </p>
-                ))}
+                )) : null}
 
               </div>
               <div className="pokemon__info-block">
@@ -81,6 +81,7 @@ export default function Pokemon() {
                 ))}
               </div>
             </div>
+            {/* <h4 className="pokemon__header">Stats:</h4> */}
             <div className="pokemon__stats">
 
               {pokemon?.stats.map((el) => (
@@ -97,6 +98,7 @@ export default function Pokemon() {
                     />
                   </div>
                 </React.Fragment>
+
               ))}
             </div>
 
