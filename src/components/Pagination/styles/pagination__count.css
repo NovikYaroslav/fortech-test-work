@@ -1,4 +1,4 @@
-.list_count {
+.pagination__count {
   display: flex;
   gap: 5px;
 }

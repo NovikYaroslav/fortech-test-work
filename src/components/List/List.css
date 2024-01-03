@@ -1,18 +1,35 @@
 .list {
-  margin-top: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 20px;
+  padding: 0;
+  margin: 15px 0 0 0;
+  list-style: none;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr auto;
+  column-gap: 20px;
+  row-gap: 25px;
 }
 
-@import url('./styles/list_content.css');
-@import url('./styles/list_count.css');
-@import url('./styles/list_count-amount.css');
-@import url('./styles/list_count-amount_current.css');
-@import url('./styles/list-pagination.css');
-@import url('./styles/list-pagination-page.css');
-@import url('./styles/list-pagination-active-page.css');
-@import url('./styles/list-pagination-previous-page.css');
-@import url('./styles/list-pagination-next-page.css');
+@media (max-width: 1629px) {
+  .list {
+    grid-template-columns: repeat(4, 300px);
+  }
+}
+
+@media (max-width: 1305px) {
+  .list {
+    grid-template-columns: repeat(3, 300px);
+  }
+}
+
+@media (max-width: 985px) {
+  .list {
+    grid-template-columns: repeat(2, 300px);
+  }
+}
+
+@media (max-width: 670px) {
+  .list {
+    grid-template-columns: repeat(1, 300px);
+  }
+}

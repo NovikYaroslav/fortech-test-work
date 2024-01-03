@@ -10,7 +10,7 @@
     padding: 15px 15px 15px 15px;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 880px) {
     .pokemon__info-block {
         padding: 10px 10px 10px 10px;
     }

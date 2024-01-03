@@ -1,0 +1,17 @@
+.pagination {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+  }
+
+@import url('./styles/pagination__count.css');
+@import url('./styles/pagination__count-amount.css');
+@import url('./styles/pagination__count-amount_current.css');
+@import url('./styles/pagination__list.css');
+@import url('./styles/pagination__list-page.css');
+@import url('./styles/pagination__list-active-page.css');
+@import url('./styles/pagination__list-previous-page.css');
+@import url('./styles/pagination__list-next-page.css');

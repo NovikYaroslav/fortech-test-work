@@ -1,4 +1,4 @@
-.list-pagination-next-page {
+.pagination__list-next-page {
   border-radius: 50%;
   height: 50px;
   width: 50px;
@@ -7,7 +7,7 @@
     rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset; */
 }
 
-.list-pagination-next-page:hover {
+.pagination__list-next-page:hover {
   cursor: pointer;
   opacity: 0.5;
 }

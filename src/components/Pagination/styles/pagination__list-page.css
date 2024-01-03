@@ -1,9 +1,9 @@
-.list-pagination-page {
+.pagination__list-page {
   font-size: 20px;
   padding: 0 3px 0 3px;
 }
 
-.list-pagination-page:hover {
+.pagination__list-page:hover {
   cursor: pointer;
   opacity: 0.5;
 }
