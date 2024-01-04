@@ -4,8 +4,8 @@ import ReactPaginate from 'react-paginate';
 import {
   selectAllPokemonsData,
   selectAllPokemonsAmount,
-  selectCurrentPokemonsList,
-  setCurrentPokemonsData,
+  selectFiltredPokemonsList,
+  setFiltredPokemonsData,
   setLoaded,
   setLoading,
 } from '../../store/reducers/pokemons';
@@ -19,7 +19,7 @@ export default function Pagination() {
   const [nextAmount, setNextAmount] = useState(0);
   const [activePage, setActivePage] = useState(0);
   const dispatch = useDispatch();
-  const filtredPokemons = useSelector(selectCurrentPokemonsList);
+  const filtredPokemons = useSelector(selectFiltredPokemonsList);
   const allPokemons = useSelector(selectAllPokemonsData);
   const pokemonsAmount = useSelector(selectAllPokemonsAmount);
   const pageCount = Math.ceil(filtredPokemons.length > 0
@@ -46,7 +46,7 @@ export default function Pagination() {
     }
 
     if (paginatedPokemons.length === 0) {
-      dispatch(setCurrentPokemonsData([]));
+      dispatch(setFiltredPokemonsData([]));
       dispatch(setLoaded());
       return;
     }
@@ -54,7 +54,7 @@ export default function Pagination() {
     Promise.all(
       paginatedPokemons.map((el) => fetch(`https://pokeapi.co/api/v2/pokemon/${el.name}`).then((response) => response.json())),
     )
-      .then((data) => dispatch(setCurrentPokemonsData(data)))
+      .then((data) => dispatch(setFiltredPokemonsData(data)))
       .then(() => dispatch(setLoaded()))
       .catch((error) => console.error(error));
   }

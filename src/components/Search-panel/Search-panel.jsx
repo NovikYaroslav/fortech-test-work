@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentPokemonsListByName, resetCurrentPokemonsList, selectCurrentPokemonTypes } from '../../store/reducers/pokemons';
+import {
+  setFiltredPokemonsListByName,
+  resetFiltredPokemonsList,
+  resetNotFoundStatus,
+  selectSelectedPokemonsTypes,
+} from '../../store/reducers/pokemons';
 import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
 import pokeball from '../../img/pokeball.png';
 import dismiss from '../../img/dismiss.png';
@@ -8,7 +13,7 @@ import './Search-panel.css';
 
 export default function SearchPanel() {
   const dispatch = useDispatch();
-  const selectedTypes = useSelector(selectCurrentPokemonTypes);
+  const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const [pokemonName, setPokemonName] = useState('');
 
   // Add debounce
@@ -17,22 +22,24 @@ export default function SearchPanel() {
 
   useEffect(() => {
     if (pokemonName === '') {
-      dispatch(resetCurrentPokemonsList());
+      dispatch(resetFiltredPokemonsList());
     }
   }, [pokemonName]);
 
   function handleShowButtonClick(evt) {
     evt.preventDefault();
-    dispatch(setCurrentPokemonsListByName(pokemonName));
+    dispatch(setFiltredPokemonsListByName(pokemonName));
   }
 
   function handleSearchCancelClick() {
     if (selectedTypes.length > 0) {
       setPokemonName('');
       dispatch(fetchPokemonsWithTypes(selectedTypes));
+      dispatch(resetNotFoundStatus());
     } else {
       setPokemonName('');
-      dispatch(resetCurrentPokemonsList());
+      dispatch(resetFiltredPokemonsList());
+      dispatch(resetNotFoundStatus());
     }
   }
 

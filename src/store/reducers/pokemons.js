@@ -10,13 +10,14 @@ const pokemonsInitialState = {
   allPokemonsTypesList: undefined,
   allPokemonsAmount: undefined,
 
-  currentPokemonsList: [],
-  currentPokemonsData: [],
-  currentPokemonTypes: [],
+  filtredPokemonsList: [],
+  filtredPokemonsData: [],
+  selectedPokemonsTypes: [],
 
   selectedPokemon: undefined,
 
   loading: false,
+  notFound: false,
 };
 
 export const PokemonsSlice = createSlice({
@@ -24,31 +25,41 @@ export const PokemonsSlice = createSlice({
   initialState: pokemonsInitialState,
   reducers: {
 
-    setCurrentPokemonsList: (state, action) => {
-      state.currentPokemonsList = action.payload;
+    setFiltredPokemonsList: (state, action) => {
+      state.filtredPokemonsList = action.payload;
     },
-    setCurrentPokemonsData: (state, action) => {
-      state.currentPokemonsData = action.payload;
+    setFiltredPokemonsData: (state, action) => {
+      state.filtredPokemonsData = action.payload;
     },
 
-    setCurrentPokemonsListByName: (state, action) => {
-      if (state.currentPokemonTypes.length !== 0) {
-        state.currentPokemonsList = state.currentPokemonsList
+    setFiltredPokemonsListByName: (state, action) => {
+      if (state.selectedPokemonsTypes.length !== 0) {
+        const foundedInCurrentPoks = state.filtredPokemonsList
           .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
+        state.filtredPokemonsList = foundedInCurrentPoks.length !== 0
+          ? foundedInCurrentPoks
+          : (state.notFound = true, []);
       } else {
-        state.currentPokemonsList = state.allPokemonsData
+        const foundedInAllPoks = state.allPokemonsData
           .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
+        state.filtredPokemonsList = foundedInAllPoks.length !== 0
+          ? foundedInAllPoks
+          : (state.notFound = true, []);
       }
     },
-    resetCurrentPokemonsList: (state) => {
-      state.currentPokemonsList = [];
+    resetFiltredPokemonsList: (state) => {
+      state.filtredPokemonsList = [];
+    },
+
+    resetNotFoundStatus: (state) => {
+      state.notFound = false;
     },
 
     setSelectedTypes: (state, action) => {
-      state.currentPokemonTypes = action.payload;
+      state.selectedPokemonsTypes = action.payload;
     },
     removeSelectedTypes: (state, action) => {
-      state.currentPokemonTypes = state.currentPokemonTypes
+      state.selectedPokemonsTypes = state.selectedPokemonsTypes
         .filter((type) => type !== action.payload);
     },
 
@@ -69,37 +80,14 @@ export const PokemonsSlice = createSlice({
       state.allPokemonsAmount = action.payload.count;
     });
     builder.addCase(fetchAllPokemonsTypes.fulfilled, (state, action) => {
-      state.allPokemonsTypesList = action.payload.results;
+      // Looks like API bug. Unknown type returns nothing.
+      state.allPokemonsTypesList = action.payload.results.filter((type) => type.name !== 'unknown');
     });
     builder.addCase(fetchPokemonsWithTypes.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
-      // const { selectedType, response } = action.payload;
-      // console.log(selectedType);
-      console.log(action.payload);
-
-      // убери логику с чисткой массива
-      // if (state.currentPokemonTypes.includes(selectedType)) {
-      //   state.currentPokemonTypes = state.currentPokemonTypes
-      //     .filter((type) => type !== selectedType);
-      //   state.currentPokemonsList = state.currentPokemonsList.filter(
-      //     (pokemon) => !response.pokemon.some((p) => p.pokemon.name === pokemon.name),
-      //   );
-      // } else {
-      //   state.currentPokemonTypes.push(selectedType);
-      state.currentPokemonsList = action.payload;
-      //   const allSelectedByType = [
-      //     ...state.currentPokemonsList,
-      //     ...response.pokemon.map((pokemon) => pokemon.pokemon),
-      //   ];
-
-      //   const uniquePokemonsSet = new Set(allSelectedByType
-      //     .map((pokemon) => pokemon.name));
-      //   state.currentPokemonsList = Array.from(uniquePokemonsSet).map((pokemonName) => ({
-      //     name: pokemonName,
-      //   }));
-      // }
+      state.filtredPokemonsList = action.payload;
     });
     builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {
       state.selectedPokemon = action.payload;
@@ -116,37 +104,40 @@ const selectAllPokemonsData = (state) => state.pokemons.allPokemonsData;
 const selectAllPokemonsTypesList = (state) => state.pokemons.allPokemonsTypesList;
 const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
 
-const selectCurrentPokemonsList = (state) => state.pokemons.currentPokemonsList;
-const selectCurrentPokemonsData = (state) => state.pokemons.currentPokemonsData;
-const selectCurrentPokemonTypes = (state) => state.pokemons.currentPokemonTypes;
+const selectFiltredPokemonsList = (state) => state.pokemons.filtredPokemonsList;
+const selectFiltredPokemonsData = (state) => state.pokemons.filtredPokemonsData;
+const selectSelectedPokemonsTypes = (state) => state.pokemons.selectedPokemonsTypes;
 
 const selectSelectedPokemon = (state) => state.pokemons.selectedPokemon;
 
 const selectLoadingStatus = (state) => state.pokemons.loading;
+const selectNotFoundStatus = (state) => state.pokemons.notFound;
 
 export {
   selectAllPokemonsData,
   selectAllPokemonsTypesList,
   selectAllPokemonsAmount,
 
-  selectCurrentPokemonsList,
-  selectCurrentPokemonsData,
-  selectCurrentPokemonTypes,
+  selectFiltredPokemonsList,
+  selectFiltredPokemonsData,
+  selectSelectedPokemonsTypes,
 
   selectSelectedPokemon,
 
   selectLoadingStatus,
+  selectNotFoundStatus,
 };
 
 export const {
   setAllPokemonsData,
   setAllPokemonsTypesList,
-  setCurrentPokemonsList,
-  setCurrentPokemonsData,
-  setCurrentPokemonsListByName,
+  setFiltredPokemonsList,
+  setFiltredPokemonsData,
+  setFiltredPokemonsListByName,
   setSelectedTypes,
   removeSelectedTypes,
-  resetCurrentPokemonsList,
+  resetFiltredPokemonsList,
+  resetNotFoundStatus,
   addChoosenTypes,
   setLoading,
   setLoaded,

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
+import NotFound from '../../components/Not-found/Not-found';
 import question from '../../img/no-image.png';
 import { statsColors, typesColors } from '../../utils/data';
 import { selectSelectedPokemon, selectLoadingStatus } from '../../store/reducers/pokemons';
@@ -20,6 +21,15 @@ export default function Pokemon() {
     dispatch(fetchSelectedPokemon(pokemonName));
   }, []);
 
+  if (pokemon === undefined) {
+    return (
+      <div className="pokemon">
+        <Link to="/" className="pokemon__back-button" type="button" />
+        <NotFound />
+      </div>
+    );
+  }
+
   return (
     !loaded
 
@@ -29,7 +39,7 @@ export default function Pokemon() {
           <div className="pokemon__data">
 
             <div className="pokemon__name">
-              <h3 className="pokemon__header-name">{pokemon?.name.charAt(0).toUpperCase() + pokemon?.name.slice(1)}</h3>
+              <h3 className="pokemon__header-name">{pokemon?.name?.charAt(0).toUpperCase() + pokemon?.name?.slice(1)}</h3>
               <h3 className="pokemon__header-name">
                 #
                 {pokemon?.id}

@@ -1,0 +1,8 @@
+.not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+@import url('./styles/not-found__image.css');
+@import url('./styles/not-found__text.css');

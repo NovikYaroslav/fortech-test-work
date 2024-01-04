@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import {
-  selectCurrentPokemonsData,
+  selectFiltredPokemonsData,
   selectLoadingStatus,
 } from '../../store/reducers/pokemons';
 import prepareTypes from '../../utils/preparation-functions';
 import './List.css';
 
 export default function List() {
-  const pokemonsData = useSelector(selectCurrentPokemonsData);
+  const pokemonsData = useSelector(selectFiltredPokemonsData);
   const loading = useSelector(selectLoadingStatus);
 
   return (
