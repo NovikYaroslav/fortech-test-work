@@ -3,7 +3,7 @@
   min-height: 50%;
   align-items: center;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 @import url('./styles/loader__image.css');
