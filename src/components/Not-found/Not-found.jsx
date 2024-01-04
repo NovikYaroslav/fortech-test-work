@@ -2,6 +2,8 @@ import React from 'react';
 import psyduck from '../../img/psyduck.png';
 import './Not-found.css';
 
+// Add location checker to change message
+
 export default function NotFound() {
   return (
     <div className="not-found">

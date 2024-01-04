@@ -18,11 +18,10 @@ export default function SearchPanel() {
 
   // Add debounce
 
-  console.log(selectedTypes);
-
   useEffect(() => {
     if (pokemonName === '') {
       dispatch(resetFiltredPokemonsList());
+      dispatch(resetNotFoundStatus());
     }
   }, [pokemonName]);
 
