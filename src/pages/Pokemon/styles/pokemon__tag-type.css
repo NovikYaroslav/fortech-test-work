@@ -1,8 +1,8 @@
-.pokemon__tag-type{
+.pokemon__tag-type {
     margin: 0;
     width: 90%;
     height: 30%;
-    font-size: 1.5vw;
+    font-size: 32px;
     font-weight: bold;
     text-align: center;
     text-transform: capitalize;
@@ -12,3 +12,9 @@
     box-sizing: border-box;
   }
   
+
+@media (max-width: 980px) {
+  .pokemon__tag-type {
+      font-size: 26px;
+  }
+}
