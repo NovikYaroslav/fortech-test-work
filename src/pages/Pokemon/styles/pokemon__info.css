@@ -5,5 +5,11 @@
     gap: 10px;
     color: white;
     font-size: 22px;
-    width: 100%;
+    width: 810px;
 }
+
+@media (max-width: 980px) {
+    .pokemon__info  {
+        width: 99%;
+    }
+  }

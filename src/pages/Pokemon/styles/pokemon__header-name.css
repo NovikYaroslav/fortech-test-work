@@ -2,5 +2,11 @@
     margin: 0;
     padding: 0;
     color: aliceblue;
-    font-size: 3vw;
+    font-size: 58px;
 }
+
+@media (max-width: 450px) {
+    .pokemon__header-name {
+        font-size: 34px;
+    }
+  }
