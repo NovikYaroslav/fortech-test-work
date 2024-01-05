@@ -44,16 +44,16 @@ export const PokemonsSlice = createSlice({
 
     setFiltredPokemonsListByName: (state, action) => {
       if (state.selectedPokemonsTypes.length !== 0) {
-        const foundedInCurrentPoks = state.filtredPokemonsList
+        const foundedInFiltredPoks = state.filtredPokemonsList
           .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
-        state.filtredPokemonsList = foundedInCurrentPoks.length !== 0
-          ? foundedInCurrentPoks
+        state.filtredPokemonsList = foundedInFiltredPoks.length !== 0
+          ? (state.notFound = false, foundedInFiltredPoks)
           : (state.notFound = true, []);
       } else {
         const foundedInAllPoks = state.allPokemonsData
           .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
         state.filtredPokemonsList = foundedInAllPoks.length !== 0
-          ? foundedInAllPoks
+          ? (state.notFound = false, foundedInAllPoks)
           : (state.notFound = true, []);
       }
     },
