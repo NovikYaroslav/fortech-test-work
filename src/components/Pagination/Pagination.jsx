@@ -5,10 +5,10 @@ import {
   selectAllPokemonsData,
   selectAllPokemonsAmount,
   selectPerPageAmount,
-  // selectActivePage,
+  selectActivePage,
   selectFiltredPokemonsList,
   setPerPageAmount,
-  // setActivePage,
+  setActivePage,
   setFiltredPokemonsData,
   setLoaded,
   setLoading,
@@ -19,10 +19,11 @@ import './Pagination.css';
 // ugly code. eslint errors. hosting of functions ignored.
 
 export default function Pagination() {
-  const amountPerPage = useSelector(selectPerPageAmount);
-  const [nextAmount, setNextAmount] = useState(0);
-  const [activePage, setActivePage] = useState(0);
   const dispatch = useDispatch();
+  const amountPerPage = useSelector(selectPerPageAmount);
+  const activePage = useSelector(selectActivePage);
+  const [nextAmount, setNextAmount] = useState(0);
+
   const filtredPokemons = useSelector(selectFiltredPokemonsList);
   const allPokemons = useSelector(selectAllPokemonsData);
   const pokemonsAmount = useSelector(selectAllPokemonsAmount);
@@ -32,7 +33,7 @@ export default function Pagination() {
 
   const handlePageClick = (event) => {
     dispatch(setLoading());
-    setActivePage(event.selected);
+    dispatch(setActivePage(event.selected));
     setNextAmount((event.selected * amountPerPage));
   };
 
@@ -65,7 +66,7 @@ export default function Pagination() {
 
   function handleAmountButtonClick(amount) {
     const newActivePage = Math.floor(nextAmount / amount);
-    setActivePage(newActivePage);
+    dispatch(setActivePage(newActivePage));
     dispatch(setPerPageAmount(amount));
   }
 
@@ -76,12 +77,12 @@ export default function Pagination() {
   useEffect(() => {
     handlePokemonList();
     const newActivePage = Math.floor((nextAmount + amountPerPage - 1) / amountPerPage);
-    setActivePage(newActivePage);
+    dispatch(setActivePage(newActivePage));
   }, [nextAmount, amountPerPage]);
 
   useEffect(() => {
     if (filtredPokemons.length === 0) {
-      setActivePage(0);
+      dispatch(setActivePage(0));
       setPerPageAmount(10);
       setNextAmount(0);
     }
@@ -89,7 +90,7 @@ export default function Pagination() {
 
   useEffect(() => {
     if (activePage > pageCount) {
-      setActivePage(0);
+      dispatch(setActivePage(0));
       setPerPageAmount(amountToShow[0]);
       setNextAmount(0);
     }
