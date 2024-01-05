@@ -1,7 +1,6 @@
 .pokemon__back-button {
     border: none;
     background-color: transparent;
-    /* border-radius: 50%; */
     background-image: url(../../../img/back-pixel.png);
     background-position: center;
     background-repeat: no-repeat;

@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import {
   selectAllPokemonsData,
   selectAllPokemonsAmount,
+  selectPerPageAmount,
+  selectActivePage,
   selectFiltredPokemonsList,
+  setPerPageAmount,
+  setActivePage,
   setFiltredPokemonsData,
   setLoaded,
   setLoading,
@@ -15,26 +19,43 @@ import './Pagination.css';
 // ugly code. eslint errors. hosting of functions ignored.
 
 export default function Pagination() {
-  const [currentAmount, setCurrentAmount] = useState(amountToShow[0]);
-  const [nextAmount, setNextAmount] = useState(0);
-  const [activePage, setActivePage] = useState(0);
   const dispatch = useDispatch();
+  const amountPerPage = useSelector(selectPerPageAmount);
+  const activePage = useSelector(selectActivePage);
+
   const filtredPokemons = useSelector(selectFiltredPokemonsList);
   const allPokemons = useSelector(selectAllPokemonsData);
   const pokemonsAmount = useSelector(selectAllPokemonsAmount);
-  const pageCount = Math.ceil(filtredPokemons.length > 0
-    ? filtredPokemons.length / currentAmount
-    : pokemonsAmount / currentAmount);
 
-  const handlePageClick = (event) => {
-    dispatch(setLoading());
-    setActivePage(event.selected);
-    setNextAmount((event.selected * currentAmount));
-  };
+  const pageCount = Math.ceil(
+    filtredPokemons.length > 0
+      ? filtredPokemons.length / amountPerPage
+      : pokemonsAmount / amountPerPage,
+  );
 
-  function handlePokemonList() {
-    const startIndex = activePage * currentAmount;
-    const endIndex = startIndex + currentAmount;
+  function fetchPaginatedPokemons(pokemons) {
+    Promise.all(
+      pokemons.map((el) => fetch(`https://pokeapi.co/api/v2/pokemon/${el.name}`).then((response) => response.json())),
+    )
+      .then((data) => {
+        dispatch(setFiltredPokemonsData(data));
+        dispatch(setLoaded());
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(setLoaded());
+      });
+  }
+
+  function calculateNewActivePage(currentActivePage, newAmountPerPage, totalItems) {
+    const newActivePage = Math.floor((currentActivePage * amountPerPage) / newAmountPerPage);
+    return Math.min(newActivePage, Math.ceil(totalItems / newAmountPerPage) - 1);
+  }
+
+  function handlePokemonList(newActivePage, newAmountPerPage) {
+    const startIndex = newActivePage * newAmountPerPage;
+    const endIndex = startIndex + newAmountPerPage;
+
     let paginatedPokemons;
 
     if (filtredPokemons && filtredPokemons.length > 0) {
@@ -48,46 +69,42 @@ export default function Pagination() {
     if (paginatedPokemons.length === 0) {
       dispatch(setFiltredPokemonsData([]));
       dispatch(setLoaded());
-      return;
+    } else {
+      dispatch(setLoading());
+      fetchPaginatedPokemons(paginatedPokemons);
     }
+  }
 
-    Promise.all(
-      paginatedPokemons.map((el) => fetch(`https://pokeapi.co/api/v2/pokemon/${el.name}`).then((response) => response.json())),
-    )
-      .then((data) => dispatch(setFiltredPokemonsData(data)))
-      .then(() => dispatch(setLoaded()))
-      .catch((error) => console.error(error));
+  function handlePageClick(event) {
+    const newActivePage = event.selected;
+    dispatch(setLoading());
+    dispatch(setActivePage(newActivePage));
+    handlePokemonList(newActivePage, amountPerPage);
   }
 
   function handleAmountButtonClick(amount) {
-    const newActivePage = Math.floor(nextAmount / amount);
-    setActivePage(newActivePage);
-    setCurrentAmount(amount);
+    const totalItems = filtredPokemons.length > 0 ? filtredPokemons.length : pokemonsAmount;
+    const newActivePage = calculateNewActivePage(activePage, amount, totalItems);
+    dispatch(setActivePage(newActivePage));
+    dispatch(setPerPageAmount(amount));
+    handlePokemonList(newActivePage, amount);
   }
 
   useEffect(() => {
-    handlePokemonList();
-  }, [allPokemons, filtredPokemons]);
-
-  useEffect(() => {
-    handlePokemonList();
-    const newActivePage = Math.floor((nextAmount + currentAmount - 1) / currentAmount);
-    setActivePage(newActivePage);
-  }, [nextAmount, currentAmount]);
+    handlePokemonList(activePage, amountPerPage);
+  }, [allPokemons, filtredPokemons, activePage, amountPerPage]);
 
   useEffect(() => {
     if (filtredPokemons.length === 0) {
-      setActivePage(0);
-      setCurrentAmount(10);
-      setNextAmount(0);
+      dispatch(setActivePage(0));
+      dispatch(setPerPageAmount(10));
     }
   }, [filtredPokemons]);
 
   useEffect(() => {
     if (activePage > pageCount) {
-      setActivePage(0);
-      setCurrentAmount(amountToShow[0]);
-      setNextAmount(0);
+      dispatch(setActivePage(0));
+      dispatch(setPerPageAmount(amountToShow[0]));
     }
   }, [activePage, pageCount]);
 
@@ -97,7 +114,7 @@ export default function Pagination() {
         {amountToShow.map((amount) => (
           <button
             className={`pagination__count-amount ${
-              currentAmount === amount ? 'pagination__count-amount_current' : null
+              amountPerPage === amount ? 'pagination__count-amount_current' : null
             }`}
             onClick={() => handleAmountButtonClick(amount)}
             key={amount}
@@ -116,13 +133,12 @@ export default function Pagination() {
         previousLabel="<"
         pageRangeDisplayed={3}
         marginPagesDisplayed={2}
-        onPageChange={handlePageClick}
+        onPageChange={(evt) => handlePageClick(evt)}
         pageLinkClassName="pagination__list-page"
         activeLinkClassName="pagination__list-active-page"
         previousLinkClassName="pagination__list-previous-page"
         nextLinkClassName="pagination__list-next-page"
       />
     </div>
-
   );
 }

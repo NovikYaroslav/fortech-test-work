@@ -10,6 +10,9 @@ const pokemonsInitialState = {
   allPokemonsTypesList: undefined,
   allPokemonsAmount: undefined,
 
+  perPageAmount: 10,
+  activePage: 0,
+
   filtredPokemonsList: [],
   filtredPokemonsData: [],
   selectedPokemonsTypes: [],
@@ -32,18 +35,25 @@ export const PokemonsSlice = createSlice({
       state.filtredPokemonsData = action.payload;
     },
 
+    setPerPageAmount: (state, action) => {
+      state.perPageAmount = action.payload;
+    },
+    setActivePage: (state, action) => {
+      state.activePage = action.payload;
+    },
+
     setFiltredPokemonsListByName: (state, action) => {
       if (state.selectedPokemonsTypes.length !== 0) {
-        const foundedInCurrentPoks = state.filtredPokemonsList
+        const foundedInFiltredPoks = state.filtredPokemonsList
           .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
-        state.filtredPokemonsList = foundedInCurrentPoks.length !== 0
-          ? foundedInCurrentPoks
+        state.filtredPokemonsList = foundedInFiltredPoks.length !== 0
+          ? (state.notFound = false, foundedInFiltredPoks)
           : (state.notFound = true, []);
       } else {
         const foundedInAllPoks = state.allPokemonsData
           .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
         state.filtredPokemonsList = foundedInAllPoks.length !== 0
-          ? foundedInAllPoks
+          ? (state.notFound = false, foundedInAllPoks)
           : (state.notFound = true, []);
       }
     },
@@ -104,6 +114,9 @@ const selectAllPokemonsData = (state) => state.pokemons.allPokemonsData;
 const selectAllPokemonsTypesList = (state) => state.pokemons.allPokemonsTypesList;
 const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
 
+const selectPerPageAmount = (state) => state.pokemons.perPageAmount;
+const selectActivePage = (state) => state.pokemons.activePage;
+
 const selectFiltredPokemonsList = (state) => state.pokemons.filtredPokemonsList;
 const selectFiltredPokemonsData = (state) => state.pokemons.filtredPokemonsData;
 const selectSelectedPokemonsTypes = (state) => state.pokemons.selectedPokemonsTypes;
@@ -118,6 +131,9 @@ export {
   selectAllPokemonsTypesList,
   selectAllPokemonsAmount,
 
+  selectPerPageAmount,
+  selectActivePage,
+
   selectFiltredPokemonsList,
   selectFiltredPokemonsData,
   selectSelectedPokemonsTypes,
@@ -131,6 +147,8 @@ export {
 export const {
   setAllPokemonsData,
   setAllPokemonsTypesList,
+  setPerPageAmount,
+  setActivePage,
   setFiltredPokemonsList,
   setFiltredPokemonsData,
   setFiltredPokemonsListByName,

@@ -1,8 +1,10 @@
 .search-panel {
   display: flex;
-  width: 332px;
-  justify-content: flex-end;
-  gap: 10px;
+  justify-content: flex-start;
+  padding-left: 90px;
+  width: 300px;
+  gap: 5px;
+ 
 }
 
 @media (max-width: 355px) {
