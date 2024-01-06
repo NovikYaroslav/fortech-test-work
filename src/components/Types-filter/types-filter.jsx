@@ -18,19 +18,9 @@ export default function TypesFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
   const pokemonsTypes = useSelector(selectAllPokemonsTypesList);
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
-  // const [activeTags, setActiveTags] = useState([]);
-
-  console.log(selectedTypes);
-  // console.log(activeTags);
 
   function onTagClick(typeName) {
-    // if (!activeTags.includes(typeName)) {
-    //   setActiveTags((prevActiveTags) => [...prevActiveTags, typeName]);
-    // }
-    // else {
-    // setActiveTags((prevActiveTags) => prevActiveTags.filter((tag) => tag !== typeName));
     dispatch(setSelectedTypes(typeName));
-    // dispatch(removeSelectedTypes(typeName));
     searchParams.delete('types', selectedTypes);
     setSearchParams(searchParams);
     // }
@@ -57,7 +47,6 @@ export default function TypesFilter() {
       setSearchParams(searchParams);
     } else {
       dispatch(resetFiltredPokemonsList());
-      // dispatch(setActivePage(0));
       selectedTypes.forEach((tag) => dispatch(removeSelectedTypes(tag)));
       searchParams.delete('types', selectedTypes);
       setSearchParams(searchParams);
