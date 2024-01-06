@@ -26,12 +26,10 @@ export default function Main() {
     const types = searchParams.getAll('types');
     const page = Number(searchParams.get('currentPage'));
     const item = Number(searchParams.get('itemsPerPage'));
-    const checkedTypes = types[0] !== '' ? types.join(' ').split(',') : [];
 
     // if (types.length > 0) {
     //   types.join('');
     // }
-
     console.log(types);
 
     // Good to write like this
@@ -45,12 +43,18 @@ export default function Main() {
     if (item) {
       dispatch(setPerPageAmount(item));
     }
-    if (checkedTypes.length) {
-      console.log('types appling');
-      checkedTypes.forEach((type) => {
+
+    if (types.length) {
+      types.join('').split(',').forEach((type) => {
         dispatch(setSelectedTypes(type));
       });
     }
+    // if (types.length) {
+    //   console.log('types appling');
+    //   checkedTypes.forEach((type) => {
+    //     dispatch(setSelectedTypes(type));
+    //   });
+    // }
     // const search = searchParams.get('searchValue') || '';
 
     // if (types.length) {
