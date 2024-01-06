@@ -23,9 +23,10 @@ export default function Main() {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const types = searchParams.getAll('types').join(' ').split(',');
+    const types = searchParams.getAll('types');
     const page = Number(searchParams.get('currentPage'));
     const item = Number(searchParams.get('itemsPerPage'));
+    const checkedTypes = types[0] !== '' ? types.join(' ').split(',') : [];
 
     // if (types.length > 0) {
     //   types.join('');
@@ -44,9 +45,9 @@ export default function Main() {
     if (item) {
       dispatch(setPerPageAmount(item));
     }
-    if (types[0] !== '') {
+    if (checkedTypes.length) {
       console.log('types appling');
-      types.forEach((type) => {
+      checkedTypes.forEach((type) => {
         dispatch(setSelectedTypes(type));
       });
     }
