@@ -53,6 +53,11 @@ export default function TypesFilter() {
     }
   }, [selectedTypes]);
 
+  useEffect(() => {
+    searchParams.set('types', selectedTypes);
+    setSearchParams(searchParams);
+  }, [selectedTypes]);
+
   return (
     <div className="types-filter">
       {pokemonsTypes?.map((type) => (
