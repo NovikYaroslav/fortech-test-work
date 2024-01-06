@@ -19,6 +19,8 @@ export default function SearchPanel() {
   const [pokemonName, setPokemonName] = useState('');
   const [debouncedName, isPending] = useDebounce(pokemonName, 500);
 
+  console.log(selectedTypes);
+
   useEffect(() => {
     if (debouncedName) {
       if (selectedTypes.length > 0) {

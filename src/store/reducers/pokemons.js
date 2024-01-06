@@ -17,6 +17,8 @@ const pokemonsInitialState = {
   filtredPokemonsData: [],
   selectedPokemonsTypes: [],
 
+  currentPokemonList: [],
+
   selectedPokemon: undefined,
 
   loading: false,
@@ -55,7 +57,7 @@ export const PokemonsSlice = createSlice({
     setFiltredPokemonsListByName: (state, action) => {
       // after not found true, with correct search string, not found not updating.
       const searchString = action.payload.toLowerCase();
-      const foundedInFiltredPoks = state.filtredPokemonsList
+      const foundedInFiltredPoks = state.currentPokemonList
         .filter((pokemon) => pokemon.name.includes(searchString));
       state.filtredPokemonsList = foundedInFiltredPoks.length !== 0
         ? foundedInFiltredPoks
@@ -103,6 +105,7 @@ export const PokemonsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
+      state.currentPokemonList = action.payload;
       state.filtredPokemonsList = action.payload;
     });
     builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {

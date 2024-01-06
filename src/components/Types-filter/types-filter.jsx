@@ -32,6 +32,7 @@ export default function TypesFilter() {
 
   function onClearClick() {
     dispatch(resetFiltredPokemonsList());
+    activeTags.forEach((tag) => dispatch(removeSelectedTypes(tag)));
     setActiveTags([]);
   }
 
