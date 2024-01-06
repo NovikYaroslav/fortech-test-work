@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import {
   setPokemonsListByName,
   setFiltredPokemonsListByName,
@@ -15,6 +16,7 @@ import './Search-panel.css';
 
 export default function SearchPanel() {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const [pokemonName, setPokemonName] = useState('');
   const [debouncedName, isPending] = useDebounce(pokemonName, 500);
@@ -29,12 +31,26 @@ export default function SearchPanel() {
     }
   }, [debouncedName]);
 
+  useEffect(() => {
+    if (!pokemonName) {
+      searchParams.delete('search');
+      setSearchParams(searchParams);
+    } else {
+      searchParams.set('search', pokemonName);
+      setSearchParams(searchParams);
+    }
+  }, [pokemonName]);
+
   function handleSearchCancelClick() {
     if (selectedTypes.length > 0) {
       setPokemonName('');
+      searchParams.delete('search');
+      setSearchParams(searchParams);
       dispatch(fetchPokemonsWithTypes(selectedTypes));
       dispatch(resetNotFoundStatus());
     } else {
+      searchParams.delete('search');
+      setSearchParams(searchParams);
       setPokemonName('');
       dispatch(resetFiltredPokemonsList());
       dispatch(resetNotFoundStatus());

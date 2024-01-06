@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import {
-  selectAllPokemonsTypesList, resetFiltredPokemonsList, setSelectedTypes, removeSelectedTypes,
+  selectAllPokemonsTypesList,
+  resetFiltredPokemonsList,
+  setSelectedTypes,
+  removeSelectedTypes,
+  setActivePage,
 } from '../../store/reducers/pokemons';
 import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
 import { typesColors } from '../../utils/data';
@@ -9,6 +14,7 @@ import './types-filter.css';
 
 export default function TypesFilter() {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const pokemonsTypes = useSelector(selectAllPokemonsTypesList);
   const [activeTags, setActiveTags] = useState([]);
 
@@ -18,23 +24,41 @@ export default function TypesFilter() {
     } else {
       setActiveTags((prevActiveTags) => prevActiveTags.filter((tag) => tag !== typeName));
       dispatch(removeSelectedTypes(typeName));
+      searchParams.delete('types', activeTags);
+      setSearchParams(searchParams);
     }
   }
+
+  function onClearClick() {
+    dispatch(resetFiltredPokemonsList());
+    dispatch(setActivePage(0));
+    activeTags.forEach((tag) => dispatch(removeSelectedTypes(tag)));
+
+    searchParams.delete('types', activeTags);
+    setSearchParams(searchParams);
+    setActiveTags([]);
+  }
+
+  useEffect(() => {
+    if (activeTags.length === 1) {
+      dispatch(setActivePage(0));
+    }
+  }, [activeTags]);
 
   useEffect(() => {
     if (activeTags.length > 0) {
       dispatch(setSelectedTypes(activeTags));
       dispatch(fetchPokemonsWithTypes(activeTags));
+      searchParams.set('types', activeTags);
+      setSearchParams(searchParams);
     } else {
       dispatch(resetFiltredPokemonsList());
+      dispatch(setActivePage(0));
+      activeTags.forEach((tag) => dispatch(removeSelectedTypes(tag)));
+      searchParams.delete('types', activeTags);
+      setSearchParams(searchParams);
     }
   }, [activeTags]);
-
-  function onClearClick() {
-    dispatch(resetFiltredPokemonsList());
-    activeTags.forEach((tag) => dispatch(removeSelectedTypes(tag)));
-    setActiveTags([]);
-  }
 
   return (
     <div className="types-filter">

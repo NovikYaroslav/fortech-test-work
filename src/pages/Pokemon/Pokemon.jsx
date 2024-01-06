@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loader/Loader';
 import NotFound from '../../components/Not-found/Not-found';
 import question from '../../img/no-image.png';
@@ -12,6 +12,7 @@ import './Pokemon.css';
 
 export default function Pokemon() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const urlParams = useParams();
   const pokemonName = String(urlParams.name);
   const loaded = useSelector(selectLoadingStatus);
@@ -24,7 +25,7 @@ export default function Pokemon() {
   if (pokemon === undefined) {
     return (
       <div className="pokemon">
-        <Link to="/" className="pokemon__back-button" type="button" />
+        <button className="pokemon__back-button" type="button" onClick={() => navigate(-1)}> </button>
         <NotFound />
       </div>
     );
