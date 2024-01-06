@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  setPokemonsListByName,
   setFiltredPokemonsListByName,
   resetFiltredPokemonsList,
   resetNotFoundStatus,
@@ -20,7 +21,11 @@ export default function SearchPanel() {
 
   useEffect(() => {
     if (debouncedName) {
-      dispatch(setFiltredPokemonsListByName(debouncedName));
+      if (selectedTypes.length > 0) {
+        dispatch(setFiltredPokemonsListByName(debouncedName));
+      } else {
+        dispatch(setPokemonsListByName(debouncedName));
+      }
     }
   }, [debouncedName]);
 

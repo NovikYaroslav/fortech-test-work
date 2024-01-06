@@ -27,6 +27,8 @@ export default function Pagination() {
   const allPokemons = useSelector(selectAllPokemonsData);
   const pokemonsAmount = useSelector(selectAllPokemonsAmount);
 
+  console.log(filtredPokemons);
+
   const pageCount = Math.ceil(
     filtredPokemons.length > 0
       ? filtredPokemons.length / amountPerPage

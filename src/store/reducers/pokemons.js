@@ -42,21 +42,26 @@ export const PokemonsSlice = createSlice({
       state.activePage = action.payload;
     },
 
-    setFiltredPokemonsListByName: (state, action) => {
-      if (state.selectedPokemonsTypes.length !== 0) {
-        const foundedInFiltredPoks = state.filtredPokemonsList
-          .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
-        state.filtredPokemonsList = foundedInFiltredPoks.length !== 0
-          ? (state.notFound = false, foundedInFiltredPoks)
-          : (state.notFound = true, []);
-      } else {
-        const foundedInAllPoks = state.allPokemonsData
-          .filter((pokemon) => pokemon.name.includes(action.payload.toLowerCase()));
-        state.filtredPokemonsList = foundedInAllPoks.length !== 0
-          ? (state.notFound = false, foundedInAllPoks)
-          : (state.notFound = true, []);
-      }
+    setPokemonsListByName: (state, action) => {
+      const searchString = action.payload.toLowerCase();
+      const foundedInAllPoks = state.allPokemonsData
+        .filter((pokemon) => pokemon.name.includes(searchString));
+      state.filtredPokemonsList = foundedInAllPoks.length !== 0
+        ? foundedInAllPoks
+        : [];
+      state.notFound = state.filtredPokemonsList.length === 0;
     },
+
+    setFiltredPokemonsListByName: (state, action) => {
+      const searchString = action.payload.toLowerCase();
+      const foundedInFiltredPoks = state.filtredPokemonsList
+        .filter((pokemon) => pokemon.name.includes(searchString));
+      state.filtredPokemonsList = foundedInFiltredPoks.length !== 0
+        ? foundedInFiltredPoks
+        : [];
+      state.notFound = state.filtredPokemonsList.length === 0;
+    },
+
     resetFiltredPokemonsList: (state) => {
       state.filtredPokemonsList = [];
     },
@@ -151,6 +156,7 @@ export const {
   setActivePage,
   setFiltredPokemonsList,
   setFiltredPokemonsData,
+  setPokemonsListByName,
   setFiltredPokemonsListByName,
   setSelectedTypes,
   removeSelectedTypes,
