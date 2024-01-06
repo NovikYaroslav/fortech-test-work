@@ -10,8 +10,6 @@ import './Main.css';
 export default function Main() {
   const pokemonsNotFound = useSelector(selectNotFoundStatus);
 
-  console.log(pokemonsNotFound);
-
   return (
     <main className="main">
       <ActionsPanel />
