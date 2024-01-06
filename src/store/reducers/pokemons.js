@@ -41,6 +41,7 @@ export const PokemonsSlice = createSlice({
       state.perPageAmount = action.payload;
     },
     setActivePage: (state, action) => {
+      console.log(action.payload);
       state.activePage = action.payload;
     },
 
@@ -74,7 +75,12 @@ export const PokemonsSlice = createSlice({
     },
 
     setSelectedTypes: (state, action) => {
-      state.selectedPokemonsTypes = action.payload;
+      if (state.selectedPokemonsTypes.includes((action.payload))) {
+        state.selectedPokemonsTypes = state.selectedPokemonsTypes
+          .filter((type) => type !== action.payload);
+      } else {
+        state.selectedPokemonsTypes = [...state.selectedPokemonsTypes, action.payload];
+      }
     },
     removeSelectedTypes: (state, action) => {
       state.selectedPokemonsTypes = state.selectedPokemonsTypes

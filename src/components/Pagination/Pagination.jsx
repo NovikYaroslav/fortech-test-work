@@ -35,8 +35,8 @@ export default function Pagination() {
       : pokemonsAmount / amountPerPage,
   );
 
-  console.log(amountPerPage);
-  console.log(activePage);
+  // console.log(amountPerPage);
+  // console.log(activePage);
   // console.log(searchParams.get('currentPage'));
   // console.log(searchParams.get('itemsPerPage'));
   // console.log(searchParams.get('search'));
