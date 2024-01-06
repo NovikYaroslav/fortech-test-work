@@ -20,7 +20,7 @@ export default function TypesFilter() {
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   // const [activeTags, setActiveTags] = useState([]);
 
-  // console.log(selectedTypes);
+  console.log(selectedTypes);
   // console.log(activeTags);
 
   function onTagClick(typeName) {

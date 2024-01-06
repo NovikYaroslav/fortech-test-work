@@ -12,7 +12,7 @@ import {
   // setFiltredPokemonsListByName,
   setActivePage,
   setPerPageAmount,
-  // setSelectedTypes,
+  setSelectedTypes,
 } from '../../store/reducers/pokemons';
 import './Main.css';
 
@@ -44,9 +44,12 @@ export default function Main() {
     if (item) {
       dispatch(setPerPageAmount(item));
     }
-    // if (types !== '') {
-    //   dispatch(setSelectedTypes(types));
-    // }
+    if (types[0] !== '') {
+      console.log('types appling');
+      types.forEach((type) => {
+        dispatch(setSelectedTypes(type));
+      });
+    }
     // const search = searchParams.get('searchValue') || '';
 
     // if (types.length) {
