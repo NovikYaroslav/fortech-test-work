@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+// import { useSearchParams } from 'react-router-dom';
 import {
   selectAllPokemonsTypesList,
   selectSelectedPokemonsTypes,
@@ -15,49 +15,30 @@ import './types-filter.css';
 
 export default function TypesFilter() {
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
   const pokemonsTypes = useSelector(selectAllPokemonsTypesList);
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
 
   function onTagClick(typeName) {
-    dispatch(setSelectedTypes(typeName));
+    if (!selectedTypes.includes(typeName)) {
+      dispatch(setSelectedTypes(typeName));
+      dispatch(fetchPokemonsWithTypes([...selectedTypes, typeName]));
+    } else {
+      dispatch(removeSelectedTypes(typeName));
+      dispatch(fetchPokemonsWithTypes(selectedTypes.filter((type) => type !== typeName)));
+    }
   }
 
   function onClearClick() {
     dispatch(resetFiltredPokemonsList());
     dispatch(setActivePage(0));
     selectedTypes.forEach((tag) => dispatch(removeSelectedTypes(tag)));
-    console.log('удаляю типы из url на фильтрах');
-    searchParams.delete('types', selectedTypes);
-    setSearchParams(searchParams);
   }
 
   useEffect(() => {
     if (selectedTypes.length === 1) {
       dispatch(setActivePage(0));
     }
-  }, [selectedTypes]);
-
-  useEffect(() => {
-    if (selectedTypes.length > 0) {
-      dispatch(fetchPokemonsWithTypes(selectedTypes));
-      console.log('выставляю типы из url на в фильтрах');
-      console.log(selectedTypes);
-      console.log(searchParams.getAll('types'));
-      searchParams.set('types', selectedTypes);
-      setSearchParams(searchParams);
-    } else {
-      dispatch(resetFiltredPokemonsList());
-      selectedTypes.forEach((tag) => dispatch(removeSelectedTypes(tag)));
-      // console.log('удаляю типы из url на фильтрах');
-      // searchParams.delete('types', selectedTypes);
-      // setSearchParams(searchParams);
-    }
-  }, [selectedTypes]);
-
-  useEffect(() => {
-    searchParams.set('types', selectedTypes);
-    setSearchParams(searchParams);
   }, [selectedTypes]);
 
   return (

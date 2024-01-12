@@ -98,16 +98,23 @@ export default function Pagination() {
     handlePokemonList(newActivePage, amount);
   }
 
-  // effect to make new paginated poks list according to choosen filters / page / amount
+  // effect to make new paginated poks list
   useEffect(() => {
-    handlePokemonList(activePage, amountPerPage);
+    if (allPokemons) {
+      handlePokemonList(activePage, amountPerPage);
+    }
   }, [allPokemons, filtredPokemons]);
 
-  // effect to set search params according active page and amount
+  // effect to set search params according active page / amount / types
   useEffect(() => {
     searchParams.set('currentPage', activePage + 1);
     searchParams.set('itemsPerPage', amountPerPage);
-    searchParams.set('types', selectedTypes);
+    if (selectedTypes.length) {
+      searchParams.set('types', [...new Set(selectedTypes)]);
+    }
+    if (!selectedTypes.length) {
+      searchParams.delete('types');
+    }
     setSearchParams(searchParams);
   }, [amountPerPage, activePage, selectedTypes]);
 

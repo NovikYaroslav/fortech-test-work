@@ -7,6 +7,7 @@ import {
   resetFiltredPokemonsList,
   resetNotFoundStatus,
   selectSelectedPokemonsTypes,
+  selectFiltredPokemonsList,
 } from '../../store/reducers/pokemons';
 import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
 import dismiss from '../../img/dismiss.png';
@@ -17,7 +18,9 @@ import './Search-panel.css';
 export default function SearchPanel() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get('search');
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
+  const filtredPokemons = useSelector(selectFiltredPokemonsList);
   const [pokemonName, setPokemonName] = useState('');
   const [debouncedName, isPending] = useDebounce(pokemonName, 500);
 
@@ -30,6 +33,12 @@ export default function SearchPanel() {
       }
     }
   }, [debouncedName]);
+
+  useEffect(() => {
+    if (search) {
+      setPokemonName(search);
+    }
+  }, []);
 
   useEffect(() => {
     if (!pokemonName) {
@@ -56,9 +65,8 @@ export default function SearchPanel() {
       dispatch(resetNotFoundStatus());
     }
   }
-
   useEffect(() => {
-    if (pokemonName === '' && !isPending) {
+    if (pokemonName === '' && !isPending && filtredPokemons.length) {
       handleSearchCancelClick();
     }
   }, [pokemonName, isPending]);

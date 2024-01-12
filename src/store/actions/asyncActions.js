@@ -18,17 +18,6 @@ export const fetchAllPokemonsTypes = createAsyncThunk(
   },
 );
 
-// export const fetchPokemonsWithTypes = createAsyncThunk(
-//   'pokemonsType/fetchAllByType',
-//   async (selectedType) => {
-//     const response = await fetch(
-//       `https://pokeapi.co/api/v2/type/${selectedType}`,
-//     )
-//       .then((res) => res.json());
-//     return { response, selectedType };
-//   },
-// );
-
 export const fetchPokemonsWithTypes = createAsyncThunk(
   'pokemonsType/fetchAllByType',
   async (selectedTypes) => {

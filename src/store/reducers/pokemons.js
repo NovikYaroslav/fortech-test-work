@@ -56,6 +56,7 @@ export const PokemonsSlice = createSlice({
 
     setFiltredPokemonsListByName: (state, action) => {
       // after not found true, with correct search string, not found not updating.
+      console.log(action.payload);
       const searchString = action.payload.toLowerCase();
       const foundedInFiltredPoks = state.currentPokemonList
         .filter((pokemon) => pokemon.name.includes(searchString));
@@ -74,13 +75,7 @@ export const PokemonsSlice = createSlice({
     },
 
     setSelectedTypes: (state, action) => {
-      console.log(action.payload);
-      if (state.selectedPokemonsTypes.includes((action.payload))) {
-        state.selectedPokemonsTypes = state.selectedPokemonsTypes
-          .filter((type) => type !== action.payload);
-      } else {
-        state.selectedPokemonsTypes = [...state.selectedPokemonsTypes, action.payload];
-      }
+      state.selectedPokemonsTypes.push(action.payload);
     },
     removeSelectedTypes: (state, action) => {
       state.selectedPokemonsTypes = state.selectedPokemonsTypes

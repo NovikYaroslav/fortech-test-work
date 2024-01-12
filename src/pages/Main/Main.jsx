@@ -6,10 +6,10 @@ import Pagination from '../../components/Pagination/Pagination';
 import List from '../../components/List/List';
 import NotFound from '../../components/Not-found/Not-found';
 import {
-  // selectAllPokemonsData,
+  selectAllPokemonsData,
   // selectFiltredPokemonsList,
   selectNotFoundStatus,
-  // setPokemonsListByName,
+  setPokemonsListByName,
   // setFiltredPokemonsListByName,
   setActivePage,
   setPerPageAmount,
@@ -20,7 +20,7 @@ import './Main.css';
 export default function Main() {
   const dispatch = useDispatch();
   const pokemonsNotFound = useSelector(selectNotFoundStatus);
-  // const allPokemons = useSelector(selectAllPokemonsData);
+  const allPokemons = useSelector(selectAllPokemonsData);
   // const filtredPokemons = useSelector(selectFiltredPokemonsList);
   const [searchParams] = useSearchParams();
 
@@ -28,8 +28,9 @@ export default function Main() {
     const types = searchParams.getAll('types');
     const page = Number(searchParams.get('currentPage'));
     const item = Number(searchParams.get('itemsPerPage'));
+    const search = searchParams.get('search');
 
-    console.log(types);
+    console.log(search);
 
     // Good to write like this
     // page && dispatch(setActivePage(page - 1));
@@ -50,7 +51,11 @@ export default function Main() {
         dispatch(setSelectedTypes(type));
       });
     }
-  }, []);
+
+    if (search && allPokemons) {
+      dispatch(setPokemonsListByName(search));
+    }
+  }, [allPokemons]);
 
   return (
     <main className="main">
