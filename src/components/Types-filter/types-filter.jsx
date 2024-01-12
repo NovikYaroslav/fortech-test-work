@@ -21,15 +21,13 @@ export default function TypesFilter() {
 
   function onTagClick(typeName) {
     dispatch(setSelectedTypes(typeName));
-    searchParams.delete('types', selectedTypes);
-    setSearchParams(searchParams);
-    // }
   }
 
   function onClearClick() {
     dispatch(resetFiltredPokemonsList());
     dispatch(setActivePage(0));
     selectedTypes.forEach((tag) => dispatch(removeSelectedTypes(tag)));
+    console.log('удаляю типы из url на фильтрах');
     searchParams.delete('types', selectedTypes);
     setSearchParams(searchParams);
   }
@@ -43,13 +41,17 @@ export default function TypesFilter() {
   useEffect(() => {
     if (selectedTypes.length > 0) {
       dispatch(fetchPokemonsWithTypes(selectedTypes));
+      console.log('выставляю типы из url на в фильтрах');
+      console.log(selectedTypes);
+      console.log(searchParams.getAll('types'));
       searchParams.set('types', selectedTypes);
       setSearchParams(searchParams);
     } else {
       dispatch(resetFiltredPokemonsList());
       selectedTypes.forEach((tag) => dispatch(removeSelectedTypes(tag)));
-      searchParams.delete('types', selectedTypes);
-      setSearchParams(searchParams);
+      // console.log('удаляю типы из url на фильтрах');
+      // searchParams.delete('types', selectedTypes);
+      // setSearchParams(searchParams);
     }
   }, [selectedTypes]);
 

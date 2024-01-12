@@ -6,6 +6,8 @@ import Pagination from '../../components/Pagination/Pagination';
 import List from '../../components/List/List';
 import NotFound from '../../components/Not-found/Not-found';
 import {
+  // selectAllPokemonsData,
+  // selectFiltredPokemonsList,
   selectNotFoundStatus,
   // setPokemonsListByName,
   // setFiltredPokemonsListByName,
@@ -18,12 +20,16 @@ import './Main.css';
 export default function Main() {
   const dispatch = useDispatch();
   const pokemonsNotFound = useSelector(selectNotFoundStatus);
+  // const allPokemons = useSelector(selectAllPokemonsData);
+  // const filtredPokemons = useSelector(selectFiltredPokemonsList);
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const types = searchParams.getAll('types');
     const page = Number(searchParams.get('currentPage'));
     const item = Number(searchParams.get('itemsPerPage'));
+
+    console.log(types);
 
     // Good to write like this
     // page && dispatch(setActivePage(page - 1));
@@ -39,6 +45,7 @@ export default function Main() {
     }
 
     if (types.length) {
+      console.log('выставляю типы из url на главной');
       types.join('').split(',').forEach((type) => {
         dispatch(setSelectedTypes(type));
       });

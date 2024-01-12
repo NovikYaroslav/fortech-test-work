@@ -13,6 +13,7 @@ import {
   setFiltredPokemonsData,
   setLoaded,
   setLoading,
+  selectSelectedPokemonsTypes,
 } from '../../store/reducers/pokemons';
 import amountToShow from '../../utils/const';
 import './Pagination.css';
@@ -24,7 +25,7 @@ export default function Pagination() {
   const [searchParams, setSearchParams] = useSearchParams();
   const amountPerPage = useSelector(selectPerPageAmount);
   const activePage = useSelector(selectActivePage);
-
+  const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const filtredPokemons = useSelector(selectFiltredPokemonsList);
   const allPokemons = useSelector(selectAllPokemonsData);
   const pokemonsAmount = useSelector(selectAllPokemonsAmount);
@@ -34,13 +35,6 @@ export default function Pagination() {
       ? filtredPokemons.length / amountPerPage
       : pokemonsAmount / amountPerPage,
   );
-
-  // console.log(amountPerPage);
-  // console.log(activePage);
-  // console.log(searchParams.get('currentPage'));
-  // console.log(searchParams.get('itemsPerPage'));
-  // console.log(searchParams.get('search'));
-  // console.log(searchParams.getAll('types'));
 
   // function to fetch poks from paginatedPoksList
   function fetchPaginatedPokemons(pokemons) {
@@ -113,8 +107,9 @@ export default function Pagination() {
   useEffect(() => {
     searchParams.set('currentPage', activePage + 1);
     searchParams.set('itemsPerPage', amountPerPage);
+    searchParams.set('types', selectedTypes);
     setSearchParams(searchParams);
-  }, [amountPerPage, activePage]);
+  }, [amountPerPage, activePage, selectedTypes]);
 
   return (
     <div className="pagination">
