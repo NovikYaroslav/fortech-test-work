@@ -41,6 +41,12 @@ export default function TypesFilter() {
     }
   }, [selectedTypes]);
 
+  useEffect(() => {
+    if (selectedTypes.length) {
+      dispatch(fetchPokemonsWithTypes(selectedTypes));
+    }
+  }, [selectedTypes.length]);
+
   return (
     <div className="types-filter">
       {pokemonsTypes?.map((type) => (

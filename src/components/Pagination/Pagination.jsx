@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+// import { useSearchParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import {
   selectAllPokemonsData,
@@ -13,7 +13,7 @@ import {
   setFiltredPokemonsData,
   setLoaded,
   setLoading,
-  selectSelectedPokemonsTypes,
+  // selectSelectedPokemonsTypes,
 } from '../../store/reducers/pokemons';
 import amountToShow from '../../utils/const';
 import './Pagination.css';
@@ -22,10 +22,10 @@ import './Pagination.css';
 
 export default function Pagination() {
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
   const amountPerPage = useSelector(selectPerPageAmount);
   const activePage = useSelector(selectActivePage);
-  const selectedTypes = useSelector(selectSelectedPokemonsTypes);
+  // const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const filtredPokemons = useSelector(selectFiltredPokemonsList);
   const allPokemons = useSelector(selectAllPokemonsData);
   const pokemonsAmount = useSelector(selectAllPokemonsAmount);
@@ -106,17 +106,17 @@ export default function Pagination() {
   }, [allPokemons, filtredPokemons]);
 
   // effect to set search params according active page / amount / types
-  useEffect(() => {
-    searchParams.set('currentPage', activePage + 1);
-    searchParams.set('itemsPerPage', amountPerPage);
-    if (selectedTypes.length) {
-      searchParams.set('types', [...new Set(selectedTypes)]);
-    }
-    if (!selectedTypes.length) {
-      searchParams.delete('types');
-    }
-    setSearchParams(searchParams);
-  }, [amountPerPage, activePage, selectedTypes]);
+  // useEffect(() => {
+  //   searchParams.set('currentPage', activePage + 1);
+  //   searchParams.set('itemsPerPage', amountPerPage);
+  //   if (selectedTypes.length) {
+  //     searchParams.set('types', [...new Set(selectedTypes)]);
+  //   }
+  //   if (!selectedTypes.length) {
+  //     searchParams.delete('types');
+  //   }
+  //   setSearchParams(searchParams);
+  // }, [amountPerPage, activePage, selectedTypes]);
 
   return (
     <div className="pagination">

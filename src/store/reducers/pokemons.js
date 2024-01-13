@@ -12,10 +12,11 @@ const pokemonsInitialState = {
 
   perPageAmount: 10,
   activePage: 0,
+  selectedPokemonsTypes: [],
+  searchName: '',
 
   filtredPokemonsList: [],
   filtredPokemonsData: [],
-  selectedPokemonsTypes: [],
 
   currentPokemonList: [],
 
@@ -43,8 +44,12 @@ export const PokemonsSlice = createSlice({
     setActivePage: (state, action) => {
       state.activePage = action.payload;
     },
+    setSearchName: (state, action) => {
+      state.searchName = action.payload;
+    },
 
     setPokemonsListByName: (state, action) => {
+      console.log('отработал фильтр по поиску');
       const searchString = action.payload.toLowerCase();
       const foundedInAllPoks = state.allPokemonsData
         .filter((pokemon) => pokemon.name.includes(searchString));
@@ -56,7 +61,7 @@ export const PokemonsSlice = createSlice({
 
     setFiltredPokemonsListByName: (state, action) => {
       // after not found true, with correct search string, not found not updating.
-      console.log(action.payload);
+      console.log('отработал фильтр по поиску фильтрованных');
       const searchString = action.payload.toLowerCase();
       const foundedInFiltredPoks = state.currentPokemonList
         .filter((pokemon) => pokemon.name.includes(searchString));
@@ -126,10 +131,11 @@ const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
 
 const selectPerPageAmount = (state) => state.pokemons.perPageAmount;
 const selectActivePage = (state) => state.pokemons.activePage;
+const selectSelectedPokemonsTypes = (state) => state.pokemons.selectedPokemonsTypes;
+const selectSearchName = (state) => state.pokemons.searchName;
 
 const selectFiltredPokemonsList = (state) => state.pokemons.filtredPokemonsList;
 const selectFiltredPokemonsData = (state) => state.pokemons.filtredPokemonsData;
-const selectSelectedPokemonsTypes = (state) => state.pokemons.selectedPokemonsTypes;
 
 const selectSelectedPokemon = (state) => state.pokemons.selectedPokemon;
 
@@ -143,10 +149,11 @@ export {
 
   selectPerPageAmount,
   selectActivePage,
+  selectSelectedPokemonsTypes,
+  selectSearchName,
 
   selectFiltredPokemonsList,
   selectFiltredPokemonsData,
-  selectSelectedPokemonsTypes,
 
   selectSelectedPokemon,
 
@@ -159,6 +166,7 @@ export const {
   setAllPokemonsTypesList,
   setPerPageAmount,
   setActivePage,
+  setSearchName,
   setFiltredPokemonsList,
   setFiltredPokemonsData,
   setPokemonsListByName,

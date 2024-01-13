@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -8,6 +8,10 @@ import {
   resetNotFoundStatus,
   selectSelectedPokemonsTypes,
   selectFiltredPokemonsList,
+  selectSearchName,
+  setSearchName,
+  setActivePage,
+  setPerPageAmount,
 } from '../../store/reducers/pokemons';
 import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
 import dismiss from '../../img/dismiss.png';
@@ -18,58 +22,68 @@ import './Search-panel.css';
 export default function SearchPanel() {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const search = searchParams.get('search');
+  // const search = searchParams.get('search');
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const filtredPokemons = useSelector(selectFiltredPokemonsList);
-  const [pokemonName, setPokemonName] = useState('');
-  const [debouncedName, isPending] = useDebounce(pokemonName, 500);
+  const searchName = useSelector(selectSearchName);
+  const [debouncedName, isPending] = useDebounce(searchName, 500);
 
   useEffect(() => {
     if (debouncedName) {
       if (selectedTypes.length > 0) {
         dispatch(setFiltredPokemonsListByName(debouncedName));
       } else {
+        console.log('фильтрую имя по всем');
         dispatch(setPokemonsListByName(debouncedName));
       }
     }
   }, [debouncedName]);
 
-  useEffect(() => {
-    if (search) {
-      setPokemonName(search);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (search) {
+  //     dispatch(setSearchName(search));
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    if (!pokemonName) {
-      searchParams.delete('search');
-      setSearchParams(searchParams);
-    } else {
-      searchParams.set('search', pokemonName);
-      setSearchParams(searchParams);
-    }
-  }, [pokemonName]);
+  // useEffect(() => {
+  //   if (!searchName) {
+  //     searchParams.delete('search');
+  //     setSearchParams(searchParams);
+  //   } else {
+  //     searchParams.set('search', searchName);
+  //     setSearchParams(searchParams);
+  //   }
+  // }, [searchName]);
 
   function handleSearchCancelClick() {
     if (selectedTypes.length > 0) {
-      setPokemonName('');
+      dispatch(setSearchName(''));
       searchParams.delete('search');
       setSearchParams(searchParams);
+      dispatch(setActivePage(0));
+      dispatch(setPerPageAmount(10));
       dispatch(fetchPokemonsWithTypes(selectedTypes));
       dispatch(resetNotFoundStatus());
     } else {
       searchParams.delete('search');
       setSearchParams(searchParams);
-      setPokemonName('');
+      dispatch(setSearchName(''));
+      dispatch(setActivePage(0));
+      dispatch(setPerPageAmount(10));
       dispatch(resetFiltredPokemonsList());
       dispatch(resetNotFoundStatus());
     }
   }
+
+  function setPokemonName(name) {
+    dispatch(setSearchName(name));
+  }
+
   useEffect(() => {
-    if (pokemonName === '' && !isPending && filtredPokemons.length) {
+    if (searchName === '' && !isPending && filtredPokemons.length) {
       handleSearchCancelClick();
     }
-  }, [pokemonName, isPending]);
+  }, [searchName, isPending]);
 
   return (
     <div className="search-panel">
@@ -77,12 +91,12 @@ export default function SearchPanel() {
       <form className="search-panel__form">
         <input
           placeholder="Search by name"
-          value={pokemonName}
+          value={searchName}
           onChange={(evt) => setPokemonName(evt.target.value)}
           className="search-panel__input"
         />
       </form>
-      {pokemonName.length > 0 ? (
+      {searchName.length > 0 ? (
         <button className="search-panel__button" onClick={handleSearchCancelClick} type="button">
           <img className="search-panel__button-image" src={dismiss} alt="cancel" />
         </button>
