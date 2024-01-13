@@ -1,10 +1,6 @@
 # Pokemon Web Application
 
 [Live Demo](https://pokedex-two-omega.vercel.app/)
-Work in progress:
-- Few bugs fixing
-- Code cleaning and refactoring can be done
-- Missed functionality implementation required (urlParams)
 
 ## Task Description
 
@@ -23,9 +19,9 @@ You must meet the following requirements:
 
 - Develop the app with React and Redux (or any other state manager).
 - The design is not crucial, but prioritize a good overall user experience and usability. You may use existing UI libraries like Material UI or AntD.
-- **In Progress: Ensure the application is responsive, looking good on both mobile and desktop devices.**
+- Ensure the application is responsive, looking good on both mobile and desktop devices.**
 - Lint the code, preferably using the eslint standard config ([eslint-config-standard](https://github.com/feross/eslint-config-standard)).
 - Deploy the application online; Heroku, GitHub Pages, or any other free alternatives for deployment.
-- Open-source the source code on GitHub. Once the task is complete, please send the link to your GitHub repo to the manager.
+- Open-source the source code on GitHub. 
 
 ## Show Your Skills
