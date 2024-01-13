@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import {
   selectAllPokemonsData,
-  // setPokemonsListByName,
-  // setFiltredPokemonsListByName,
   setActivePage,
   setPerPageAmount,
   setSelectedTypes,
@@ -23,12 +21,12 @@ export default function UrlHandler() {
   const amountPerPage = useSelector(selectPerPageAmount);
   const searchName = useSelector(selectSearchName);
   const [searchParams, setSearchParams] = useSearchParams();
+  const types = searchParams.getAll('types');
+  const page = Number(searchParams.get('currentPage'));
+  const item = Number(searchParams.get('itemsPerPage'));
+  const search = searchParams.get('search');
 
   useEffect(() => {
-    const types = searchParams.getAll('types');
-    const page = Number(searchParams.get('currentPage'));
-    const item = Number(searchParams.get('itemsPerPage'));
-    const search = searchParams.get('search');
     // Good to write like this
     // page && dispatch(setActivePage(page - 1));
     // item && dispatch(setPerPageAmount(item));

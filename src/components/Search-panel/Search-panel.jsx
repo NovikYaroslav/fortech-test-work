@@ -29,31 +29,17 @@ export default function SearchPanel() {
   const [debouncedName, isPending] = useDebounce(searchName, 500);
 
   useEffect(() => {
+    console.log('отрабатываю');
     if (debouncedName) {
       if (selectedTypes.length > 0) {
+        dispatch(setActivePage(0));
         dispatch(setFiltredPokemonsListByName(debouncedName));
       } else {
-        console.log('фильтрую имя по всем');
+        dispatch(setActivePage(0));
         dispatch(setPokemonsListByName(debouncedName));
       }
     }
-  }, [debouncedName]);
-
-  // useEffect(() => {
-  //   if (search) {
-  //     dispatch(setSearchName(search));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!searchName) {
-  //     searchParams.delete('search');
-  //     setSearchParams(searchParams);
-  //   } else {
-  //     searchParams.set('search', searchName);
-  //     setSearchParams(searchParams);
-  //   }
-  // }, [searchName]);
+  }, [debouncedName, filtredPokemons.length]);
 
   function handleSearchCancelClick() {
     if (selectedTypes.length > 0) {

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { useSearchParams } from 'react-router-dom';
 import {
   selectAllPokemonsTypesList,
   selectSelectedPokemonsTypes,
@@ -15,7 +14,6 @@ import './types-filter.css';
 
 export default function TypesFilter() {
   const dispatch = useDispatch();
-  // const [searchParams, setSearchParams] = useSearchParams();
   const pokemonsTypes = useSelector(selectAllPokemonsTypesList);
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
 
