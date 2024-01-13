@@ -49,7 +49,6 @@ export default function UrlHandler() {
   }, [allPokemons]);
 
   useEffect(() => {
-    console.log('выставляю url');
     searchParams.set('currentPage', activePage + 1);
     searchParams.set('itemsPerPage', amountPerPage);
     if (selectedTypes.length) {
