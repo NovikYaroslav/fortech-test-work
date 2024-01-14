@@ -22,6 +22,8 @@ export default function UrlHandler() {
   const searchName = useSelector(selectSearchName);
   const [searchParams, setSearchParams] = useSearchParams();
 
+  console.log(searchParams);
+
   useEffect(() => {
     const types = searchParams.getAll('types');
     const page = Number(searchParams.get('currentPage'));
