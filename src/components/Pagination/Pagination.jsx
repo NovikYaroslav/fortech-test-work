@@ -32,7 +32,12 @@ export default function Pagination() {
 
   function handleAmountButtonClick(amount) {
     const totalItems = currentPokemons.length > 0 ? currentPokemons.length : pokemonsAmount;
-    const newActivePage = calculateNewActivePage(activePage, amount, totalItems, amountPerPage);
+    const newActivePage = calculateNewActivePage(
+      activePage,
+      amount,
+      totalItems,
+      amountPerPage,
+    );
     dispatch(setActivePage(newActivePage));
     dispatch(setPerPageAmount(amount));
   }
@@ -43,7 +48,9 @@ export default function Pagination() {
         {amountToShow.map((amount) => (
           <button
             className={`pagination__count-amount ${
-              amountPerPage === amount ? 'pagination__count-amount_current' : null
+              amountPerPage === amount
+                ? 'pagination__count-amount_current'
+                : null
             }`}
             onClick={() => handleAmountButtonClick(amount)}
             key={amount}

@@ -35,9 +35,12 @@ export default function UrlHandler() {
     // etc
     // But Eslint no-unused-expressions error
     if (types.length && !selectedTypes.length) {
-      types.join('').split(',').forEach((type) => {
-        dispatch(setSelectedTypes(type));
-      });
+      types
+        .join('')
+        .split(',')
+        .forEach((type) => {
+          dispatch(setSelectedTypes(type));
+        });
     }
     if (page) {
       dispatch(setActivePage(page - 1));
@@ -49,8 +52,6 @@ export default function UrlHandler() {
       dispatch(setSearchName(search));
     }
   }, [allPokemons]);
-
-  console.log(searchParams);
 
   useEffect(() => {
     searchParams.set('currentPage', activePage + 1);
