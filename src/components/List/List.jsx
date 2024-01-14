@@ -1,17 +1,46 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import {
+  selectActivePage,
+  selectCurrentPokemonList,
   selectFiltredPokemonsData,
   selectLoadingStatus,
+  selectPerPageAmount,
+  setFiltredPokemonsData,
+  setLoaded,
+  setLoading,
 } from '../../store/reducers/pokemons';
 import { prepareTypes } from '../../utils/preparation-functions';
 import './List.css';
 
 export default function List() {
+  const dispatch = useDispatch();
   const pokemonsData = useSelector(selectFiltredPokemonsData);
+  const activePage = useSelector(selectActivePage);
+  const amountPerPage = useSelector(selectPerPageAmount);
+  const currentPokemons = useSelector(selectCurrentPokemonList);
   const loading = useSelector(selectLoadingStatus);
+
+  useEffect(() => {
+    console.log('запрашиваю');
+    const startIndex = activePage * amountPerPage;
+    const endIndex = startIndex + amountPerPage;
+    const paginatedPokemons = currentPokemons.slice(startIndex, endIndex);
+    dispatch(setLoading());
+    Promise.all(
+      paginatedPokemons.map((el) => fetch(`https://pokeapi.co/api/v2/pokemon/${el.name}`).then((response) => response.json())),
+    )
+      .then((data) => {
+        dispatch(setFiltredPokemonsData(data));
+        dispatch(setLoaded());
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(setLoaded());
+      });
+  }, [activePage, amountPerPage, currentPokemons]);
 
   return (
     loading ? (

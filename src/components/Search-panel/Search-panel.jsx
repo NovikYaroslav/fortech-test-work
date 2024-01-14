@@ -6,6 +6,7 @@ import {
   // setFiltredPokemonsListByName,
   // resetFiltredPokemonsList,
   resetNotFoundStatus,
+  resertToInitialFilteredPokemons,
   selectSelectedPokemonsTypes,
   selectSearchName,
   setSearchName,
@@ -13,7 +14,6 @@ import {
   setPerPageAmount,
   setCurrentPokemonList,
 } from '../../store/reducers/pokemons';
-import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
 import dismiss from '../../img/dismiss.png';
 import useDebounce from '../../hooks/useDebounce';
 
@@ -41,10 +41,9 @@ export default function SearchPanel() {
       setSearchParams(searchParams);
       dispatch(setActivePage(0));
       dispatch(setPerPageAmount(10));
-      dispatch(fetchPokemonsWithTypes(selectedTypes));
+      dispatch(resertToInitialFilteredPokemons());
       dispatch(resetNotFoundStatus());
     } else {
-      console.log('стираю');
       searchParams.delete('search');
       setSearchParams(searchParams);
       dispatch(setSearchName(''));

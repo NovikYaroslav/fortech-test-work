@@ -105,6 +105,9 @@ export const PokemonsSlice = createSlice({
     resetNotFoundStatus: (state) => {
       state.notFound = false;
     },
+    resertToInitialFilteredPokemons: (state) => {
+      state.currentPokemonList = state.filtredPokemonsList;
+    },
 
     setSelectedTypes: (state, action) => {
       state.selectedPokemonsTypes.push(action.payload);
@@ -215,6 +218,7 @@ export const {
   setSelectedTypes,
   removeSelectedTypes,
   resetFiltredPokemonsList,
+  resertToInitialFilteredPokemons,
   resetNotFoundStatus,
   addChoosenTypes,
   setLoading,

@@ -22,8 +22,6 @@ export default function UrlHandler() {
   const searchName = useSelector(selectSearchName);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  console.log(searchParams);
-
   useEffect(() => {
     const types = searchParams.getAll('types');
     const page = Number(searchParams.get('currentPage'));
@@ -51,7 +49,6 @@ export default function UrlHandler() {
   }, [allPokemons]);
 
   useEffect(() => {
-    console.log('выставляю url');
     searchParams.set('currentPage', activePage + 1);
     searchParams.set('itemsPerPage', amountPerPage);
     if (selectedTypes.length) {
