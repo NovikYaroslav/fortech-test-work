@@ -22,7 +22,6 @@ export default function List() {
   const [pokemonsToShow, setPokemonsToShow] = useState();
 
   useEffect(() => {
-    console.log('запрашиваю');
     const startIndex = activePage * amountPerPage;
     const endIndex = startIndex + amountPerPage;
     const paginatedPokemons = currentPokemons.slice(startIndex, endIndex);
