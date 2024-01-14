@@ -32,7 +32,7 @@ export default function SearchPanel() {
       dispatch(setActivePage(0));
       dispatch(setPokemonsListByName(debouncedName));
     }
-  }, [debouncedName, selectedTypes.length]);
+  }, [debouncedName]);
 
   function handleSearchCancelClick() {
     if (selectedTypes.length) {
