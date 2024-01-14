@@ -7,7 +7,7 @@ import question from '../../img/no-image.png';
 import { statsColors, typesColors } from '../../utils/data';
 import { selectSelectedPokemon, selectLoadingStatus } from '../../store/reducers/pokemons';
 import { fetchSelectedPokemon } from '../../store/actions/asyncActions';
-import prepareTypes from '../../utils/preparation-functions';
+import { prepareTypes } from '../../utils/preparation-functions';
 import './Pokemon.css';
 
 export default function Pokemon() {

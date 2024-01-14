@@ -6,7 +6,7 @@ import {
   selectFiltredPokemonsData,
   selectLoadingStatus,
 } from '../../store/reducers/pokemons';
-import prepareTypes from '../../utils/preparation-functions';
+import { prepareTypes } from '../../utils/preparation-functions';
 import './List.css';
 
 export default function List() {

@@ -6,9 +6,11 @@ import {
 } from '../actions/asyncActions';
 
 const pokemonsInitialState = {
-  allPokemonsData: undefined,
+  allPokemonsData: [],
   allPokemonsTypesList: undefined,
   allPokemonsAmount: undefined,
+
+  currentPokemonList: [],
 
   perPageAmount: 10,
   activePage: 0,
@@ -18,13 +20,32 @@ const pokemonsInitialState = {
   filtredPokemonsList: [],
   filtredPokemonsData: [],
 
-  currentPokemonList: [],
-
   selectedPokemon: undefined,
 
   loading: false,
   notFound: false,
 };
+
+// 1. мы получили список всех покемонов (стейт)
+// 2. мы получили спискок всех типов (стейт)
+// 3. выставили кол-во покемонов для пагинации (стейт)
+// 4. запихнул в (стейт)текущих покемонов
+// 5. отрезали часть покемонов для запроса данных по каждому
+// 6. отрезанное кол-во отправили на запрос.
+// 7. результат запроса запихнули в в (стейт) и отдали на рендер
+
+// 8. нажимаю тип, отправляю его в (стейт)
+// 9. выставил кол-во покемонов для пагинации (стейт)
+// 10 изменил (стейт) текущих покемонов
+// 11. отрезали часть покемонов для запроса данных по каждому
+// 12. отрезанное кол-во отправили на запрос.
+// 13. результат запроса запихнули в в (стейт) и отдали на рендер
+
+// 14. ввел имя и отправил его в (стейт)
+// 15. отфильтровал стейт текущих покемонов
+// 16. отрезали часть покемонов для запроса данных по каждому
+// 17. отрезанное кол-во отправили на запрос.
+// 18. результат запроса запихнули в в (стейт) и отдали на рендер
 
 export const PokemonsSlice = createSlice({
   name: 'pokemons',
@@ -38,6 +59,13 @@ export const PokemonsSlice = createSlice({
       state.filtredPokemonsData = action.payload;
     },
 
+    setCurrentPokemonList: (state) => {
+      const initialAmount = state.allPokemonsData.length;
+      state.currentPokemonList = state.allPokemonsData;
+      state.allPokemonsAmount = initialAmount;
+      state.activePage = 0;
+    },
+
     setPerPageAmount: (state, action) => {
       state.perPageAmount = action.payload;
     },
@@ -49,26 +77,25 @@ export const PokemonsSlice = createSlice({
     },
 
     setPokemonsListByName: (state, action) => {
-      console.log('отработал фильтр по поиску');
       const searchString = action.payload.toLowerCase();
-      const foundedInAllPoks = state.allPokemonsData
-        .filter((pokemon) => pokemon.name.includes(searchString));
-      state.filtredPokemonsList = foundedInAllPoks.length !== 0
-        ? foundedInAllPoks
-        : [];
-      state.notFound = state.filtredPokemonsList.length === 0;
-    },
-
-    setFiltredPokemonsListByName: (state, action) => {
-      // after not found true, with correct search string, not found not updating.
-      console.log('отработал фильтр по поиску фильтрованных');
-      const searchString = action.payload.toLowerCase();
-      const foundedInFiltredPoks = state.currentPokemonList
-        .filter((pokemon) => pokemon.name.includes(searchString));
-      state.filtredPokemonsList = foundedInFiltredPoks.length !== 0
-        ? foundedInFiltredPoks
-        : [];
-      state.notFound = state.filtredPokemonsList.length === 0;
+      if (state.filtredPokemonsList.length) {
+        console.log('ищу в фильтрах');
+        const foundedInFiltredPoks = state.filtredPokemonsList
+          .filter((pokemon) => pokemon.name.includes(searchString));
+        state.currentPokemonList = foundedInFiltredPoks.length !== 0
+          ? foundedInFiltredPoks
+          : [];
+        state.allPokemonsAmount = foundedInFiltredPoks.length;
+        state.notFound = state.currentPokemonList.length === 0;
+      } else {
+        const foundedInAllPoks = state.allPokemonsData
+          .filter((pokemon) => pokemon.name.includes(searchString));
+        state.currentPokemonList = foundedInAllPoks.length !== 0
+          ? foundedInAllPoks
+          : [];
+        state.allPokemonsAmount = foundedInAllPoks.length;
+        state.notFound = state.currentPokemonList.length === 0;
+      }
     },
 
     resetFiltredPokemonsList: (state) => {
@@ -96,23 +123,33 @@ export const PokemonsSlice = createSlice({
 
   },
   extraReducers: (builder) => {
+    // 1. мы получили список всех покемонов (стейт)
+    // 3. выставили кол-во покемонов для пагинации (стейт)
+    // 4. запихнул в (стейт)текущих покемонов
     builder.addCase(fetchAllPokemonsData.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchAllPokemonsData.fulfilled, (state, action) => {
       state.allPokemonsData = action.payload.results;
       state.allPokemonsAmount = action.payload.count;
+      state.currentPokemonList = action.payload.results;
     });
+
+    // 2. мы получили спискок всех типов (стейт)
     builder.addCase(fetchAllPokemonsTypes.fulfilled, (state, action) => {
       // Looks like API bug. Unknown type returns nothing.
       state.allPokemonsTypesList = action.payload.results.filter((type) => type.name !== 'unknown');
     });
+
     builder.addCase(fetchPokemonsWithTypes.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
       state.currentPokemonList = action.payload;
       state.filtredPokemonsList = action.payload;
+      if (action.payload.length) {
+        state.allPokemonsAmount = action.payload.length;
+      }
     });
     builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {
       state.selectedPokemon = action.payload;
@@ -128,6 +165,8 @@ export const PokemonsSlice = createSlice({
 const selectAllPokemonsData = (state) => state.pokemons.allPokemonsData;
 const selectAllPokemonsTypesList = (state) => state.pokemons.allPokemonsTypesList;
 const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
+
+const selectCurrentPokemonList = (state) => state.pokemons.currentPokemonList;
 
 const selectPerPageAmount = (state) => state.pokemons.perPageAmount;
 const selectActivePage = (state) => state.pokemons.activePage;
@@ -146,6 +185,7 @@ export {
   selectAllPokemonsData,
   selectAllPokemonsTypesList,
   selectAllPokemonsAmount,
+  selectCurrentPokemonList,
 
   selectPerPageAmount,
   selectActivePage,
@@ -163,6 +203,7 @@ export {
 
 export const {
   setAllPokemonsData,
+  setCurrentPokemonList,
   setAllPokemonsTypesList,
   setPerPageAmount,
   setActivePage,
