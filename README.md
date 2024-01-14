@@ -1,7 +1,6 @@
 # Pokemon Web Application
-## Refactoring in process
 
-Refactoring in process
+**In Progress: Bugs fixing
 
 [Live Demo](https://pokedex-two-omega.vercel.app/)
 
@@ -14,7 +13,7 @@ You are required to build a web application with Pokemons using the free Pokemon
 - The list must include pagination with the ability to select how many items to show per page (10 / 20 / 50).
 - Implement a search box to filter pokemons by name.
 - Allow filtering pokemons by type using tags (multiple selected tags should show pokemons with any of the selected types).
-- **In Progress: Store selected filters and pagination in the URL as query parameters.**
+- Store selected filters and pagination in the URL as query parameters.**
 
 ## Requirements
 
