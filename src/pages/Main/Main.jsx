@@ -4,7 +4,7 @@ import ActionsPanel from '../../components/Actions-panel/Actitions-panel';
 import Pagination from '../../components/Pagination/Pagination';
 import List from '../../components/List/List';
 import NotFound from '../../components/Not-found/Not-found';
-// import UrlHandler from '../../components/Url-manager/Url-manager';
+import UrlHandler from '../../components/Url-manager/Url-manager';
 import {
   selectNotFoundStatus,
 } from '../../store/reducers/pokemons';
@@ -15,8 +15,8 @@ export default function Main() {
 
   return (
     <main className="main">
-      {/* <UrlHandler /> */}
       <ActionsPanel />
+      <UrlHandler />
       {pokemonsNotFound
         ? <NotFound />
         : (

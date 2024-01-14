@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import {
   selectActivePage,
   selectCurrentPokemonList,
-  selectFiltredPokemonsData,
   selectLoadingStatus,
   selectPerPageAmount,
-  setFiltredPokemonsData,
   setLoaded,
   setLoading,
 } from '../../store/reducers/pokemons';
@@ -17,11 +15,11 @@ import './List.css';
 
 export default function List() {
   const dispatch = useDispatch();
-  const pokemonsData = useSelector(selectFiltredPokemonsData);
   const activePage = useSelector(selectActivePage);
   const amountPerPage = useSelector(selectPerPageAmount);
   const currentPokemons = useSelector(selectCurrentPokemonList);
   const loading = useSelector(selectLoadingStatus);
+  const [pokemonsToShow, setPokemonsToShow] = useState();
 
   useEffect(() => {
     console.log('запрашиваю');
@@ -33,7 +31,7 @@ export default function List() {
       paginatedPokemons.map((el) => fetch(`https://pokeapi.co/api/v2/pokemon/${el.name}`).then((response) => response.json())),
     )
       .then((data) => {
-        dispatch(setFiltredPokemonsData(data));
+        setPokemonsToShow(data);
         dispatch(setLoaded());
       })
       .catch((error) => {
@@ -47,7 +45,7 @@ export default function List() {
       <Loader />
     ) : (
       <ul className="list">
-        {pokemonsData?.map((pokemon) => (
+        {pokemonsToShow?.map((pokemon) => (
           <Card
             id={pokemon.id}
             name={pokemon.name}

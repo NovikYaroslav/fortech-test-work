@@ -32,7 +32,7 @@ export default function UrlHandler() {
     // item && dispatch(setPerPageAmount(item));
     // etc
     // But Eslint no-unused-expressions error
-    if (types.length) {
+    if (types.length && !selectedTypes.length) {
       types.join('').split(',').forEach((type) => {
         dispatch(setSelectedTypes(type));
       });

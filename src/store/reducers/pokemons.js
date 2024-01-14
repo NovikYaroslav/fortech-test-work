@@ -9,7 +9,6 @@ const pokemonsInitialState = {
   allPokemonsData: [],
   allPokemonsTypesList: undefined,
   allPokemonsAmount: undefined,
-
   currentPokemonList: [],
 
   perPageAmount: 10,
@@ -18,7 +17,7 @@ const pokemonsInitialState = {
   searchName: '',
 
   filtredPokemonsList: [],
-  filtredPokemonsData: [],
+  resultPokemonsData: [],
 
   selectedPokemon: undefined,
 
@@ -26,38 +25,10 @@ const pokemonsInitialState = {
   notFound: false,
 };
 
-// 1. мы получили список всех покемонов (стейт)
-// 2. мы получили спискок всех типов (стейт)
-// 3. выставили кол-во покемонов для пагинации (стейт)
-// 4. запихнул в (стейт)текущих покемонов
-// 5. отрезали часть покемонов для запроса данных по каждому
-// 6. отрезанное кол-во отправили на запрос.
-// 7. результат запроса запихнули в в (стейт) и отдали на рендер
-
-// 8. нажимаю тип, отправляю его в (стейт)
-// 9. выставил кол-во покемонов для пагинации (стейт)
-// 10 изменил (стейт) текущих покемонов
-// 11. отрезали часть покемонов для запроса данных по каждому
-// 12. отрезанное кол-во отправили на запрос.
-// 13. результат запроса запихнули в в (стейт) и отдали на рендер
-
-// 14. ввел имя и отправил его в (стейт)
-// 15. отфильтровал стейт текущих покемонов
-// 16. отрезали часть покемонов для запроса данных по каждому
-// 17. отрезанное кол-во отправили на запрос.
-// 18. результат запроса запихнули в в (стейт) и отдали на рендер
-
 export const PokemonsSlice = createSlice({
   name: 'pokemons',
   initialState: pokemonsInitialState,
   reducers: {
-
-    setFiltredPokemonsList: (state, action) => {
-      state.filtredPokemonsList = action.payload;
-    },
-    setFiltredPokemonsData: (state, action) => {
-      state.filtredPokemonsData = action.payload;
-    },
 
     setCurrentPokemonList: (state) => {
       const initialAmount = state.allPokemonsData.length;
@@ -79,7 +50,6 @@ export const PokemonsSlice = createSlice({
     setPokemonsListByName: (state, action) => {
       const searchString = action.payload.toLowerCase();
       if (state.filtredPokemonsList.length) {
-        console.log('ищу в фильтрах');
         const foundedInFiltredPoks = state.filtredPokemonsList
           .filter((pokemon) => pokemon.name.includes(searchString));
         state.currentPokemonList = foundedInFiltredPoks.length !== 0
@@ -126,9 +96,6 @@ export const PokemonsSlice = createSlice({
 
   },
   extraReducers: (builder) => {
-    // 1. мы получили список всех покемонов (стейт)
-    // 3. выставили кол-во покемонов для пагинации (стейт)
-    // 4. запихнул в (стейт)текущих покемонов
     builder.addCase(fetchAllPokemonsData.pending, (state) => {
       state.loading = true;
     });
@@ -137,8 +104,6 @@ export const PokemonsSlice = createSlice({
       state.allPokemonsAmount = action.payload.count;
       state.currentPokemonList = action.payload.results;
     });
-
-    // 2. мы получили спискок всех типов (стейт)
     builder.addCase(fetchAllPokemonsTypes.fulfilled, (state, action) => {
       // Looks like API bug. Unknown type returns nothing.
       state.allPokemonsTypesList = action.payload.results.filter((type) => type.name !== 'unknown');
@@ -154,12 +119,12 @@ export const PokemonsSlice = createSlice({
         state.allPokemonsAmount = action.payload.length;
       }
     });
+    builder.addCase(fetchSelectedPokemon.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {
       state.selectedPokemon = action.payload;
       state.loading = false;
-    });
-    builder.addCase(fetchSelectedPokemon.pending, (state) => {
-      state.loading = true;
     });
   },
 });
@@ -168,19 +133,13 @@ export const PokemonsSlice = createSlice({
 const selectAllPokemonsData = (state) => state.pokemons.allPokemonsData;
 const selectAllPokemonsTypesList = (state) => state.pokemons.allPokemonsTypesList;
 const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
-
 const selectCurrentPokemonList = (state) => state.pokemons.currentPokemonList;
-
 const selectPerPageAmount = (state) => state.pokemons.perPageAmount;
 const selectActivePage = (state) => state.pokemons.activePage;
 const selectSelectedPokemonsTypes = (state) => state.pokemons.selectedPokemonsTypes;
 const selectSearchName = (state) => state.pokemons.searchName;
-
 const selectFiltredPokemonsList = (state) => state.pokemons.filtredPokemonsList;
-const selectFiltredPokemonsData = (state) => state.pokemons.filtredPokemonsData;
-
 const selectSelectedPokemon = (state) => state.pokemons.selectedPokemon;
-
 const selectLoadingStatus = (state) => state.pokemons.loading;
 const selectNotFoundStatus = (state) => state.pokemons.notFound;
 
@@ -189,17 +148,12 @@ export {
   selectAllPokemonsTypesList,
   selectAllPokemonsAmount,
   selectCurrentPokemonList,
-
   selectPerPageAmount,
   selectActivePage,
   selectSelectedPokemonsTypes,
   selectSearchName,
-
   selectFiltredPokemonsList,
-  selectFiltredPokemonsData,
-
   selectSelectedPokemon,
-
   selectLoadingStatus,
   selectNotFoundStatus,
 };
@@ -207,20 +161,15 @@ export {
 export const {
   setAllPokemonsData,
   setCurrentPokemonList,
-  setAllPokemonsTypesList,
   setPerPageAmount,
   setActivePage,
   setSearchName,
-  setFiltredPokemonsList,
-  setFiltredPokemonsData,
   setPokemonsListByName,
-  setFiltredPokemonsListByName,
   setSelectedTypes,
+  setLoading,
+  setLoaded,
   removeSelectedTypes,
   resetFiltredPokemonsList,
   resertToInitialFilteredPokemons,
   resetNotFoundStatus,
-  addChoosenTypes,
-  setLoading,
-  setLoaded,
 } = PokemonsSlice.actions;
