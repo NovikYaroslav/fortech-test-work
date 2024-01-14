@@ -6,9 +6,10 @@ import {
 } from '../actions/asyncActions';
 
 const pokemonsInitialState = {
-  allPokemonsData: undefined,
+  allPokemonsData: [],
   allPokemonsTypesList: undefined,
   allPokemonsAmount: undefined,
+  currentPokemonList: [],
 
   perPageAmount: 10,
   activePage: 0,
@@ -16,9 +17,7 @@ const pokemonsInitialState = {
   searchName: '',
 
   filtredPokemonsList: [],
-  filtredPokemonsData: [],
-
-  currentPokemonList: [],
+  resultPokemonsData: [],
 
   selectedPokemon: undefined,
 
@@ -31,11 +30,11 @@ export const PokemonsSlice = createSlice({
   initialState: pokemonsInitialState,
   reducers: {
 
-    setFiltredPokemonsList: (state, action) => {
-      state.filtredPokemonsList = action.payload;
-    },
-    setFiltredPokemonsData: (state, action) => {
-      state.filtredPokemonsData = action.payload;
+    setCurrentPokemonList: (state) => {
+      const initialAmount = state.allPokemonsData.length;
+      state.currentPokemonList = state.allPokemonsData;
+      state.allPokemonsAmount = initialAmount;
+      state.activePage = 0;
     },
 
     setPerPageAmount: (state, action) => {
@@ -49,26 +48,24 @@ export const PokemonsSlice = createSlice({
     },
 
     setPokemonsListByName: (state, action) => {
-      console.log('отработал фильтр по поиску');
       const searchString = action.payload.toLowerCase();
-      const foundedInAllPoks = state.allPokemonsData
-        .filter((pokemon) => pokemon.name.includes(searchString));
-      state.filtredPokemonsList = foundedInAllPoks.length !== 0
-        ? foundedInAllPoks
-        : [];
-      state.notFound = state.filtredPokemonsList.length === 0;
-    },
-
-    setFiltredPokemonsListByName: (state, action) => {
-      // after not found true, with correct search string, not found not updating.
-      console.log('отработал фильтр по поиску фильтрованных');
-      const searchString = action.payload.toLowerCase();
-      const foundedInFiltredPoks = state.currentPokemonList
-        .filter((pokemon) => pokemon.name.includes(searchString));
-      state.filtredPokemonsList = foundedInFiltredPoks.length !== 0
-        ? foundedInFiltredPoks
-        : [];
-      state.notFound = state.filtredPokemonsList.length === 0;
+      if (state.filtredPokemonsList.length) {
+        const foundedInFiltredPoks = state.filtredPokemonsList
+          .filter((pokemon) => pokemon.name.includes(searchString));
+        state.currentPokemonList = foundedInFiltredPoks.length !== 0
+          ? foundedInFiltredPoks
+          : [];
+        state.allPokemonsAmount = foundedInFiltredPoks.length;
+        state.notFound = state.currentPokemonList.length === 0;
+      } else {
+        const foundedInAllPoks = state.allPokemonsData
+          .filter((pokemon) => pokemon.name.includes(searchString));
+        state.currentPokemonList = foundedInAllPoks.length !== 0
+          ? foundedInAllPoks
+          : [];
+        state.allPokemonsAmount = foundedInAllPoks.length;
+        state.notFound = state.currentPokemonList.length === 0;
+      }
     },
 
     resetFiltredPokemonsList: (state) => {
@@ -77,6 +74,9 @@ export const PokemonsSlice = createSlice({
 
     resetNotFoundStatus: (state) => {
       state.notFound = false;
+    },
+    resertToInitialFilteredPokemons: (state) => {
+      state.currentPokemonList = state.filtredPokemonsList;
     },
 
     setSelectedTypes: (state, action) => {
@@ -102,24 +102,29 @@ export const PokemonsSlice = createSlice({
     builder.addCase(fetchAllPokemonsData.fulfilled, (state, action) => {
       state.allPokemonsData = action.payload.results;
       state.allPokemonsAmount = action.payload.count;
+      state.currentPokemonList = action.payload.results;
     });
     builder.addCase(fetchAllPokemonsTypes.fulfilled, (state, action) => {
       // Looks like API bug. Unknown type returns nothing.
       state.allPokemonsTypesList = action.payload.results.filter((type) => type.name !== 'unknown');
     });
+
     builder.addCase(fetchPokemonsWithTypes.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
       state.currentPokemonList = action.payload;
       state.filtredPokemonsList = action.payload;
+      if (action.payload.length) {
+        state.allPokemonsAmount = action.payload.length;
+      }
+    });
+    builder.addCase(fetchSelectedPokemon.pending, (state) => {
+      state.loading = true;
     });
     builder.addCase(fetchSelectedPokemon.fulfilled, (state, action) => {
       state.selectedPokemon = action.payload;
       state.loading = false;
-    });
-    builder.addCase(fetchSelectedPokemon.pending, (state) => {
-      state.loading = true;
     });
   },
 });
@@ -128,17 +133,13 @@ export const PokemonsSlice = createSlice({
 const selectAllPokemonsData = (state) => state.pokemons.allPokemonsData;
 const selectAllPokemonsTypesList = (state) => state.pokemons.allPokemonsTypesList;
 const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
-
+const selectCurrentPokemonList = (state) => state.pokemons.currentPokemonList;
 const selectPerPageAmount = (state) => state.pokemons.perPageAmount;
 const selectActivePage = (state) => state.pokemons.activePage;
 const selectSelectedPokemonsTypes = (state) => state.pokemons.selectedPokemonsTypes;
 const selectSearchName = (state) => state.pokemons.searchName;
-
 const selectFiltredPokemonsList = (state) => state.pokemons.filtredPokemonsList;
-const selectFiltredPokemonsData = (state) => state.pokemons.filtredPokemonsData;
-
 const selectSelectedPokemon = (state) => state.pokemons.selectedPokemon;
-
 const selectLoadingStatus = (state) => state.pokemons.loading;
 const selectNotFoundStatus = (state) => state.pokemons.notFound;
 
@@ -146,36 +147,29 @@ export {
   selectAllPokemonsData,
   selectAllPokemonsTypesList,
   selectAllPokemonsAmount,
-
+  selectCurrentPokemonList,
   selectPerPageAmount,
   selectActivePage,
   selectSelectedPokemonsTypes,
   selectSearchName,
-
   selectFiltredPokemonsList,
-  selectFiltredPokemonsData,
-
   selectSelectedPokemon,
-
   selectLoadingStatus,
   selectNotFoundStatus,
 };
 
 export const {
   setAllPokemonsData,
-  setAllPokemonsTypesList,
+  setCurrentPokemonList,
   setPerPageAmount,
   setActivePage,
   setSearchName,
-  setFiltredPokemonsList,
-  setFiltredPokemonsData,
   setPokemonsListByName,
-  setFiltredPokemonsListByName,
   setSelectedTypes,
-  removeSelectedTypes,
-  resetFiltredPokemonsList,
-  resetNotFoundStatus,
-  addChoosenTypes,
   setLoading,
   setLoaded,
+  removeSelectedTypes,
+  resetFiltredPokemonsList,
+  resertToInitialFilteredPokemons,
+  resetNotFoundStatus,
 } = PokemonsSlice.actions;

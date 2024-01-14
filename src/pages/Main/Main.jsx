@@ -15,8 +15,8 @@ export default function Main() {
 
   return (
     <main className="main">
-      <UrlHandler />
       <ActionsPanel />
+      <UrlHandler />
       {pokemonsNotFound
         ? <NotFound />
         : (

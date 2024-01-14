@@ -3,10 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   selectAllPokemonsTypesList,
   selectSelectedPokemonsTypes,
-  resetFiltredPokemonsList,
   setSelectedTypes,
   removeSelectedTypes,
   setActivePage,
+  setCurrentPokemonList,
+  resetFiltredPokemonsList,
+  setSearchName,
 } from '../../store/reducers/pokemons';
 import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
 import { typesColors } from '../../utils/data';
@@ -16,6 +18,20 @@ export default function TypesFilter() {
   const dispatch = useDispatch();
   const pokemonsTypes = useSelector(selectAllPokemonsTypesList);
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
+
+  useEffect(() => {
+    if (selectedTypes.length === 1) {
+      dispatch(setActivePage(0));
+    }
+    if (!selectedTypes.length) {
+      dispatch(setSearchName(''));
+      dispatch(resetFiltredPokemonsList());
+      dispatch(setCurrentPokemonList());
+    }
+    if (selectedTypes.length) {
+      dispatch(fetchPokemonsWithTypes(selectedTypes));
+    }
+  }, [selectedTypes]);
 
   function onTagClick(typeName) {
     if (!selectedTypes.includes(typeName)) {
@@ -28,22 +44,9 @@ export default function TypesFilter() {
   }
 
   function onClearClick() {
-    dispatch(resetFiltredPokemonsList());
     dispatch(setActivePage(0));
     selectedTypes.forEach((tag) => dispatch(removeSelectedTypes(tag)));
   }
-
-  useEffect(() => {
-    if (selectedTypes.length === 1) {
-      dispatch(setActivePage(0));
-    }
-  }, [selectedTypes]);
-
-  useEffect(() => {
-    if (selectedTypes.length) {
-      dispatch(fetchPokemonsWithTypes(selectedTypes));
-    }
-  }, [selectedTypes.length]);
 
   return (
     <div className="types-filter">

@@ -1,6 +1,8 @@
 # Pokemon Web Application
 ## Refactoring in process
 
+Refactoring in process
+
 [Live Demo](https://pokedex-two-omega.vercel.app/)
 
 ## Task Description
