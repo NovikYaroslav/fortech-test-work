@@ -7,23 +7,29 @@ import {
 
 const pokemonsInitialState = {
   allPokemonsData: [],
-  allPokemonsTypesList: undefined,
-  allPokemonsAmount: undefined,
   currentPokemonList: [],
-
-  perPageAmount: 10,
-  activePage: 0,
-  selectedPokemonsTypes: [],
-  searchName: '',
-
   filtredPokemonsList: [],
   resultPokemonsData: [],
+
+  allPokemonsAmount: undefined,
+  perPageAmount: 10,
+  activePage: 0,
+  pageCount: 0,
+
+  allPokemonsTypesList: undefined,
+  selectedPokemonsTypes: [],
+
+  searchName: '',
 
   selectedPokemon: undefined,
 
   loading: false,
   notFound: false,
 };
+
+function calculatePages(totalAmount, perPageAmount) {
+  return Math.ceil(totalAmount / perPageAmount);
+}
 
 export const PokemonsSlice = createSlice({
   name: 'pokemons',
@@ -34,11 +40,13 @@ export const PokemonsSlice = createSlice({
       const initialAmount = state.allPokemonsData.length;
       state.currentPokemonList = state.allPokemonsData;
       state.allPokemonsAmount = initialAmount;
-      state.activePage = 0;
+      state.pageCount = calculatePages(initialAmount, state.perPageAmount);
+      state.notFound = false;
     },
 
     setPerPageAmount: (state, action) => {
       state.perPageAmount = action.payload;
+      state.pageCount = calculatePages(state.allPokemonsAmount, action.payload);
     },
     setActivePage: (state, action) => {
       state.activePage = action.payload;
@@ -56,6 +64,7 @@ export const PokemonsSlice = createSlice({
           ? foundedInFiltredPoks
           : [];
         state.allPokemonsAmount = foundedInFiltredPoks.length;
+        state.pageCount = calculatePages(foundedInFiltredPoks.length, state.perPageAmount);
         state.notFound = state.currentPokemonList.length === 0;
       } else {
         const foundedInAllPoks = state.allPokemonsData
@@ -64,6 +73,7 @@ export const PokemonsSlice = createSlice({
           ? foundedInAllPoks
           : [];
         state.allPokemonsAmount = foundedInAllPoks.length;
+        state.pageCount = calculatePages(foundedInAllPoks.length, state.perPageAmount);
         state.notFound = state.currentPokemonList.length === 0;
       }
     },
@@ -76,7 +86,10 @@ export const PokemonsSlice = createSlice({
       state.notFound = false;
     },
     resertToInitialFilteredPokemons: (state) => {
+      const initialAmount = state.filtredPokemonsList.length;
       state.currentPokemonList = state.filtredPokemonsList;
+      state.allPokemonsAmount = initialAmount;
+      state.pageCount = calculatePages(initialAmount, state.perPageAmount);
     },
 
     setSelectedTypes: (state, action) => {
@@ -103,6 +116,7 @@ export const PokemonsSlice = createSlice({
       state.allPokemonsData = action.payload.results;
       state.allPokemonsAmount = action.payload.count;
       state.currentPokemonList = action.payload.results;
+      state.pageCount = calculatePages(action.payload.count, state.perPageAmount);
     });
     builder.addCase(fetchAllPokemonsTypes.fulfilled, (state, action) => {
       // Looks like API bug. Unknown type returns nothing.
@@ -113,10 +127,16 @@ export const PokemonsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
-      state.currentPokemonList = action.payload;
-      state.filtredPokemonsList = action.payload;
-      if (action.payload.length) {
-        state.allPokemonsAmount = action.payload.length;
+      const uniquePoks = action.payload
+        .filter((item, index, array) => array.findIndex((obj) => obj.name === item.name) === index);
+      state.currentPokemonList = uniquePoks;
+      state.filtredPokemonsList = uniquePoks;
+      if (uniquePoks.length) {
+        state.allPokemonsAmount = uniquePoks.length;
+        state.pageCount = calculatePages(uniquePoks.length, state.perPageAmount);
+      }
+      if (!uniquePoks.length) {
+        state.notFound = true;
       }
     });
     builder.addCase(fetchSelectedPokemon.pending, (state) => {
@@ -135,6 +155,7 @@ const selectAllPokemonsTypesList = (state) => state.pokemons.allPokemonsTypesLis
 const selectAllPokemonsAmount = (state) => state.pokemons.allPokemonsAmount;
 const selectCurrentPokemonList = (state) => state.pokemons.currentPokemonList;
 const selectPerPageAmount = (state) => state.pokemons.perPageAmount;
+const selectPageCount = (state) => state.pokemons.pageCount;
 const selectActivePage = (state) => state.pokemons.activePage;
 const selectSelectedPokemonsTypes = (state) => state.pokemons.selectedPokemonsTypes;
 const selectSearchName = (state) => state.pokemons.searchName;
@@ -150,6 +171,7 @@ export {
   selectCurrentPokemonList,
   selectPerPageAmount,
   selectActivePage,
+  selectPageCount,
   selectSelectedPokemonsTypes,
   selectSearchName,
   selectFiltredPokemonsList,

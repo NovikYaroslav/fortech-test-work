@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import {
   selectAllPokemonsAmount,
@@ -23,6 +24,19 @@ export default function Pagination() {
   const currentPokemons = useSelector(selectCurrentPokemonList);
   const pokemonsAmount = useSelector(selectAllPokemonsAmount);
   const pageCount = Math.ceil(pokemonsAmount / amountPerPage);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (currentPokemons.length && activePage > pageCount) {
+      dispatch(setActivePage(0));
+    }
+  }, [activePage, pageCount, currentPokemons]);
+
+  useEffect(() => {
+    searchParams.set('currentPage', activePage + 1);
+    searchParams.set('itemsPerPage', amountPerPage);
+    setSearchParams(searchParams);
+  }, [activePage, amountPerPage]);
 
   function handlePageClick(event) {
     const newActivePage = event.selected;

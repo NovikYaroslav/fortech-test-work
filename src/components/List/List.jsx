@@ -39,24 +39,26 @@ export default function List() {
       });
   }, [activePage, amountPerPage, currentPokemons]);
 
-  return (
-    loading ? (
-      <Loader />
-    ) : (
-      <ul className="list">
-        {pokemonsToShow?.map((pokemon) => (
-          <Card
-            id={pokemon.id}
-            name={pokemon.name}
-            avatar={pokemon.sprites.front_default}
-            type={prepareTypes(pokemon.types)}
-            hp={pokemon.stats.find((el) => el.stat.name === 'hp').base_stat}
-            attack={pokemon.stats.find((el) => el.stat.name === 'attack').base_stat}
-            defense={pokemon.stats.find((el) => el.stat.name === 'defense').base_stat}
-            key={pokemon.id}
-          />
-        ))}
-      </ul>
-    )
+  return loading ? (
+    <Loader />
+  ) : (
+    <ul className="list">
+      {pokemonsToShow?.map((pokemon) => (
+        <Card
+          id={pokemon.id}
+          name={pokemon.name}
+          avatar={pokemon.sprites.front_default}
+          type={prepareTypes(pokemon.types)}
+          hp={pokemon.stats.find((el) => el.stat.name === 'hp').base_stat}
+          attack={
+            pokemon.stats.find((el) => el.stat.name === 'attack').base_stat
+          }
+          defense={
+            pokemon.stats.find((el) => el.stat.name === 'defense').base_stat
+          }
+          key={pokemon.id}
+        />
+      ))}
+    </ul>
   );
 }
