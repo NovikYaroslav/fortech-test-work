@@ -1,6 +1,7 @@
-# Pokemon Web Application
+DONE. 
+DEPLOY: [Live Demo](https://pokedex-two-omega.vercel.app/)
 
-[Live Demo](https://pokedex-two-omega.vercel.app/)
+# Pokemon Web Application
 
 ## Task Description
 
