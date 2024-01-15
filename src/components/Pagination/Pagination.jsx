@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import {
   selectAllPokemonsAmount,
@@ -23,6 +24,13 @@ export default function Pagination() {
   const currentPokemons = useSelector(selectCurrentPokemonList);
   const pokemonsAmount = useSelector(selectAllPokemonsAmount);
   const pageCount = Math.ceil(pokemonsAmount / amountPerPage);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    searchParams.set('currentPage', activePage + 1);
+    searchParams.set('itemsPerPage', amountPerPage);
+    setSearchParams(searchParams);
+  }, [activePage, amountPerPage]);
 
   function handlePageClick(event) {
     const newActivePage = event.selected;
@@ -32,7 +40,12 @@ export default function Pagination() {
 
   function handleAmountButtonClick(amount) {
     const totalItems = currentPokemons.length > 0 ? currentPokemons.length : pokemonsAmount;
-    const newActivePage = calculateNewActivePage(activePage, amount, totalItems, amountPerPage);
+    const newActivePage = calculateNewActivePage(
+      activePage,
+      amount,
+      totalItems,
+      amountPerPage,
+    );
     dispatch(setActivePage(newActivePage));
     dispatch(setPerPageAmount(amount));
   }
@@ -43,7 +56,9 @@ export default function Pagination() {
         {amountToShow.map((amount) => (
           <button
             className={`pagination__count-amount ${
-              amountPerPage === amount ? 'pagination__count-amount_current' : null
+              amountPerPage === amount
+                ? 'pagination__count-amount_current'
+                : null
             }`}
             onClick={() => handleAmountButtonClick(amount)}
             key={amount}

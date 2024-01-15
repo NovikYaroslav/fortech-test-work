@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import {
   setPokemonsListByName,
   resetNotFoundStatus,
@@ -21,6 +22,7 @@ export default function SearchPanel() {
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const searchName = useSelector(selectSearchName);
   const [debouncedName] = useDebounce(searchName, 500);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (debouncedName) {
@@ -28,6 +30,16 @@ export default function SearchPanel() {
       dispatch(setPokemonsListByName(debouncedName));
     }
   }, [debouncedName]);
+
+  useEffect(() => {
+    if (!searchName) {
+      searchParams.delete('search');
+    }
+    if (searchName) {
+      searchParams.set('search', searchName);
+    }
+    setSearchParams(searchParams);
+  }, [searchName]);
 
   function handleSearchCancelClick() {
     if (selectedTypes.length) {

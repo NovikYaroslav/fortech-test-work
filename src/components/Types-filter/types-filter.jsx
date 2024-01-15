@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import {
   selectAllPokemonsTypesList,
   selectSelectedPokemonsTypes,
@@ -18,11 +19,23 @@ export default function TypesFilter() {
   const dispatch = useDispatch();
   const pokemonsTypes = useSelector(selectAllPokemonsTypesList);
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  console.log(searchParams);
 
   useEffect(() => {
-    if (selectedTypes.length === 1) {
-      dispatch(setActivePage(0));
+    console.log('эффект для юрл типов');
+    if (selectedTypes.length) {
+      console.log('выставляю типы');
+      searchParams.set('types', [...new Set(selectedTypes)]);
     }
+    if (!selectedTypes.length) {
+      searchParams.delete('types');
+    }
+    setSearchParams(searchParams);
+  }, [selectedTypes]);
+
+  useEffect(() => {
     if (!selectedTypes.length) {
       dispatch(setSearchName(''));
       dispatch(resetFiltredPokemonsList());

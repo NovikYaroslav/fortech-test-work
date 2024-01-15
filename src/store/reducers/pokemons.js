@@ -34,7 +34,7 @@ export const PokemonsSlice = createSlice({
       const initialAmount = state.allPokemonsData.length;
       state.currentPokemonList = state.allPokemonsData;
       state.allPokemonsAmount = initialAmount;
-      state.activePage = 0;
+      // state.activePage = 0;
     },
 
     setPerPageAmount: (state, action) => {
@@ -113,8 +113,10 @@ export const PokemonsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchPokemonsWithTypes.fulfilled, (state, action) => {
-      state.currentPokemonList = action.payload;
-      state.filtredPokemonsList = action.payload;
+      const uniquePoks = action.payload
+        .filter((item, index, array) => array.findIndex((obj) => obj.name === item.name) === index);
+      state.currentPokemonList = uniquePoks;
+      state.filtredPokemonsList = uniquePoks;
       if (action.payload.length) {
         state.allPokemonsAmount = action.payload.length;
       }

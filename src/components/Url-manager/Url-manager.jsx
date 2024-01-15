@@ -42,11 +42,11 @@ export default function UrlHandler() {
         });
     }
     if (page) {
-      console.log(page);
+      // console.log(page);
       dispatch(setActivePage(page - 1));
     }
     if (item) {
-      console.log(item);
+      // console.log(item);
       dispatch(setPerPageAmount(item));
     }
     if (search) {
