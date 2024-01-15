@@ -53,7 +53,7 @@ export default function Main() {
   }, [allPokemons]);
 
   return (
-    <main className='main'>
+    <main className="main">
       <ActionsPanel />
       {pokemonsNotFound ? (
         <NotFound />
