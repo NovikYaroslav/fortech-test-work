@@ -27,6 +27,12 @@ export default function Pagination() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
+    if (currentPokemons.length && activePage > pageCount) {
+      dispatch(setActivePage(0));
+    }
+  }, [activePage, pageCount, currentPokemons]);
+
+  useEffect(() => {
     searchParams.set('currentPage', activePage + 1);
     searchParams.set('itemsPerPage', amountPerPage);
     setSearchParams(searchParams);

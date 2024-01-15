@@ -2,31 +2,27 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import {
-  setPokemonsListByName,
-  resetNotFoundStatus,
-  resertToInitialFilteredPokemons,
   selectSelectedPokemonsTypes,
   selectSearchName,
+  setPokemonsListByName,
   setSearchName,
-  setActivePage,
-  setPerPageAmount,
   setCurrentPokemonList,
+  resetNotFoundStatus,
+  resertToInitialFilteredPokemons,
 } from '../../store/reducers/pokemons';
 import dismiss from '../../img/dismiss.png';
 import useDebounce from '../../hooks/useDebounce';
-
 import './Search-panel.css';
 
 export default function SearchPanel() {
   const dispatch = useDispatch();
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const searchName = useSelector(selectSearchName);
-  const [debouncedName] = useDebounce(searchName, 500);
+  const [debouncedName, isPending] = useDebounce(searchName, 500);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (debouncedName) {
-      dispatch(setActivePage(0));
       dispatch(setPokemonsListByName(debouncedName));
     }
   }, [debouncedName]);
@@ -44,14 +40,10 @@ export default function SearchPanel() {
   function handleSearchCancelClick() {
     if (selectedTypes.length) {
       dispatch(setSearchName(''));
-      dispatch(setActivePage(0));
-      dispatch(setPerPageAmount(10));
       dispatch(resertToInitialFilteredPokemons());
       dispatch(resetNotFoundStatus());
     } else {
       dispatch(setSearchName(''));
-      dispatch(setActivePage(0));
-      dispatch(setPerPageAmount(10));
       dispatch(setCurrentPokemonList());
       dispatch(resetNotFoundStatus());
     }
@@ -61,11 +53,11 @@ export default function SearchPanel() {
     dispatch(setSearchName(name));
   }
 
-  // useEffect(() => {
-  //   if (searchName === '' && !isPending) {
-  //     handleSearchCancelClick();
-  //   }
-  // }, [searchName, isPending]);
+  useEffect(() => {
+    if (searchName === '' && !isPending) {
+      handleSearchCancelClick();
+    }
+  }, [searchName, isPending]);
 
   return (
     <div className="search-panel">

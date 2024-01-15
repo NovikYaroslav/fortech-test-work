@@ -5,7 +5,6 @@ import Loader from '../Loader/Loader';
 import {
   selectActivePage,
   selectCurrentPokemonList,
-  selectFiltredPokemonsList,
   selectLoadingStatus,
   selectPerPageAmount,
   setLoaded,
@@ -19,11 +18,8 @@ export default function List() {
   const activePage = useSelector(selectActivePage);
   const amountPerPage = useSelector(selectPerPageAmount);
   const currentPokemons = useSelector(selectCurrentPokemonList);
-  const filtredPoks = useSelector(selectFiltredPokemonsList);
   const loading = useSelector(selectLoadingStatus);
   const [pokemonsToShow, setPokemonsToShow] = useState();
-
-  console.log(filtredPoks);
 
   useEffect(() => {
     const startIndex = activePage * amountPerPage;

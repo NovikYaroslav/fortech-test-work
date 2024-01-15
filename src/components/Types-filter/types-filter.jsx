@@ -5,11 +5,11 @@ import {
   selectAllPokemonsTypesList,
   selectSelectedPokemonsTypes,
   setSelectedTypes,
-  removeSelectedTypes,
   setActivePage,
   setCurrentPokemonList,
-  resetFiltredPokemonsList,
   setSearchName,
+  resetFiltredPokemonsList,
+  removeSelectedTypes,
 } from '../../store/reducers/pokemons';
 import { fetchPokemonsWithTypes } from '../../store/actions/asyncActions';
 import { typesColors } from '../../utils/data';
@@ -21,13 +21,13 @@ export default function TypesFilter() {
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  console.log(searchParams);
-
   useEffect(() => {
-    console.log('эффект для юрл типов');
     if (selectedTypes.length) {
-      console.log('выставляю типы');
       searchParams.set('types', [...new Set(selectedTypes)]);
+    }
+    if (selectedTypes.length === 1) {
+      searchParams.set('types', [...new Set(selectedTypes)]);
+      dispatch(setActivePage(0));
     }
     if (!selectedTypes.length) {
       searchParams.delete('types');
@@ -38,6 +38,7 @@ export default function TypesFilter() {
   useEffect(() => {
     if (!selectedTypes.length) {
       dispatch(setSearchName(''));
+      dispatch(setActivePage(0));
       dispatch(resetFiltredPokemonsList());
       dispatch(setCurrentPokemonList());
     }
@@ -49,14 +50,8 @@ export default function TypesFilter() {
   function onTagClick(typeName) {
     if (!selectedTypes.includes(typeName)) {
       dispatch(setSelectedTypes(typeName));
-      dispatch(fetchPokemonsWithTypes([...selectedTypes, typeName]));
     } else {
       dispatch(removeSelectedTypes(typeName));
-      dispatch(
-        fetchPokemonsWithTypes(
-          selectedTypes.filter((type) => type !== typeName),
-        ),
-      );
     }
   }
 
