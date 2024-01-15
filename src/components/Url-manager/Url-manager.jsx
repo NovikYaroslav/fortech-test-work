@@ -22,9 +22,8 @@ export default function UrlHandler() {
   const searchName = useSelector(selectSearchName);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  console.log(searchParams);
-
   useEffect(() => {
+    console.log('выставляю данные из юрл');
     const types = searchParams.getAll('types');
     const page = Number(searchParams.get('currentPage'));
     const item = Number(searchParams.get('itemsPerPage'));
@@ -43,9 +42,11 @@ export default function UrlHandler() {
         });
     }
     if (page) {
+      console.log(page);
       dispatch(setActivePage(page - 1));
     }
     if (item) {
+      console.log(item);
       dispatch(setPerPageAmount(item));
     }
     if (search) {

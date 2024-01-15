@@ -5,9 +5,7 @@ import Pagination from '../../components/Pagination/Pagination';
 import List from '../../components/List/List';
 import NotFound from '../../components/Not-found/Not-found';
 import UrlHandler from '../../components/Url-manager/Url-manager';
-import {
-  selectNotFoundStatus,
-} from '../../store/reducers/pokemons';
+import { selectNotFoundStatus } from '../../store/reducers/pokemons';
 import './Main.css';
 
 export default function Main() {
@@ -17,14 +15,14 @@ export default function Main() {
     <main className="main">
       <ActionsPanel />
       <UrlHandler />
-      {pokemonsNotFound
-        ? <NotFound />
-        : (
-          <>
-            <Pagination />
-            <List />
-          </>
-        )}
+      {pokemonsNotFound ? (
+        <NotFound />
+      ) : (
+        <>
+          <Pagination />
+          <List />
+        </>
+      )}
     </main>
   );
 }

@@ -39,7 +39,11 @@ export default function TypesFilter() {
       dispatch(fetchPokemonsWithTypes([...selectedTypes, typeName]));
     } else {
       dispatch(removeSelectedTypes(typeName));
-      dispatch(fetchPokemonsWithTypes(selectedTypes.filter((type) => type !== typeName)));
+      dispatch(
+        fetchPokemonsWithTypes(
+          selectedTypes.filter((type) => type !== typeName),
+        ),
+      );
     }
   }
 
@@ -52,10 +56,14 @@ export default function TypesFilter() {
     <div className="types-filter">
       {pokemonsTypes?.map((type) => (
         <button
-          className={`types-filter__types-tag ${selectedTypes.includes(type.name) ? 'active' : ''}`}
+          className={`types-filter__types-tag ${
+            selectedTypes.includes(type.name) ? 'active' : ''
+          }`}
           key={type.name}
           style={{
-            backgroundColor: selectedTypes.includes(type.name) ? typesColors[type.name] : '',
+            backgroundColor: selectedTypes.includes(type.name)
+              ? typesColors[type.name]
+              : '',
           }}
           onClick={() => onTagClick(type.name)}
           type="button"
@@ -63,8 +71,16 @@ export default function TypesFilter() {
           {type.name}
         </button>
       ))}
-      {selectedTypes.length > 0 ? <button className="types-filter__types-tag" type="button" style={{ backgroundColor: 'red' }} onClick={onClearClick}>Clear all</button> : null}
-
+      {selectedTypes.length > 0 ? (
+        <button
+          className="types-filter__types-tag"
+          type="button"
+          style={{ backgroundColor: 'red' }}
+          onClick={onClearClick}
+        >
+          Clear all
+        </button>
+      ) : null}
     </div>
   );
 }

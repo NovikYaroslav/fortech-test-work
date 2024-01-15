@@ -57,8 +57,12 @@ export default function SearchPanel() {
 
   return (
     <div className="search-panel">
-
-      <form className="search-panel__form" onSubmit={(evt) => { evt.preventDefault(); }}>
+      <form
+        className="search-panel__form"
+        onSubmit={(evt) => {
+          evt.preventDefault();
+        }}
+      >
         <input
           placeholder="Search by name"
           value={searchName}
@@ -67,8 +71,16 @@ export default function SearchPanel() {
         />
       </form>
       {searchName.length > 0 ? (
-        <button className="search-panel__button" onClick={handleSearchCancelClick} type="button">
-          <img className="search-panel__button-image" src={dismiss} alt="cancel" />
+        <button
+          className="search-panel__button"
+          onClick={handleSearchCancelClick}
+          type="button"
+        >
+          <img
+            className="search-panel__button-image"
+            src={dismiss}
+            alt="cancel"
+          />
         </button>
       ) : null}
     </div>
