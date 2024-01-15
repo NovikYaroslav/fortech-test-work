@@ -6,10 +6,10 @@ import {
   setActivePage,
   setPerPageAmount,
   setSelectedTypes,
-  selectActivePage,
-  selectPerPageAmount,
+  // selectActivePage,
+  // selectPerPageAmount,
   selectSelectedPokemonsTypes,
-  selectSearchName,
+  // selectSearchName,
   setSearchName,
 } from '../../store/reducers/pokemons';
 
@@ -17,10 +17,10 @@ export default function UrlHandler() {
   const dispatch = useDispatch();
   const allPokemons = useSelector(selectAllPokemonsData);
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
-  const activePage = useSelector(selectActivePage);
-  const amountPerPage = useSelector(selectPerPageAmount);
-  const searchName = useSelector(selectSearchName);
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const activePage = useSelector(selectActivePage);
+  // const amountPerPage = useSelector(selectPerPageAmount);
+  // const searchName = useSelector(selectSearchName);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     console.log('выставляю данные из юрл');
@@ -54,23 +54,23 @@ export default function UrlHandler() {
     }
   }, [allPokemons]);
 
-  useEffect(() => {
-    searchParams.set('currentPage', activePage + 1);
-    searchParams.set('itemsPerPage', amountPerPage);
-    if (selectedTypes.length) {
-      searchParams.set('types', [...new Set(selectedTypes)]);
-    }
-    if (!selectedTypes.length) {
-      searchParams.delete('types');
-    }
-    if (!searchName) {
-      searchParams.delete('search');
-    }
-    if (searchName) {
-      searchParams.set('search', searchName);
-    }
-    setSearchParams(searchParams);
-  }, [activePage, amountPerPage, selectedTypes, searchName]);
+  // useEffect(() => {
+  //   searchParams.set('currentPage', activePage + 1);
+  //   searchParams.set('itemsPerPage', amountPerPage);
+  //   if (selectedTypes.length) {
+  //     searchParams.set('types', [...new Set(selectedTypes)]);
+  //   }
+  //   if (!selectedTypes.length) {
+  //     searchParams.delete('types');
+  //   }
+  //   if (!searchName) {
+  //     searchParams.delete('search');
+  //   }
+  //   if (searchName) {
+  //     searchParams.set('search', searchName);
+  //   }
+  //   setSearchParams(searchParams);
+  // }, [activePage, amountPerPage, selectedTypes, searchName]);
 
   return null;
 }

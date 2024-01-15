@@ -20,7 +20,7 @@ export default function SearchPanel() {
   const dispatch = useDispatch();
   const selectedTypes = useSelector(selectSelectedPokemonsTypes);
   const searchName = useSelector(selectSearchName);
-  const [debouncedName, isPending] = useDebounce(searchName, 500);
+  const [debouncedName] = useDebounce(searchName, 500);
 
   useEffect(() => {
     if (debouncedName) {
@@ -49,11 +49,11 @@ export default function SearchPanel() {
     dispatch(setSearchName(name));
   }
 
-  useEffect(() => {
-    if (searchName === '' && !isPending) {
-      handleSearchCancelClick();
-    }
-  }, [searchName, isPending]);
+  // useEffect(() => {
+  //   if (searchName === '' && !isPending) {
+  //     handleSearchCancelClick();
+  //   }
+  // }, [searchName, isPending]);
 
   return (
     <div className="search-panel">
